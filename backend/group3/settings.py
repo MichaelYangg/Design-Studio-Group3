@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'members.apps.MembersConfig',
     'table_payment_done.apps.TablePaymentDoneConfig',
     'transaction.apps.TransactionConfig'
+    'g3.apps.G3Config'
 ]
 
 MIDDLEWARE = [
