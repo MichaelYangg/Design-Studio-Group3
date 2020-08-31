@@ -81,7 +81,16 @@ def deposit(request,phone_number):
     else:
         # deposit_amount = request.GET['balance'] # 待和前端确认修改
         deposit_amount = 10
-        member.balance += deposit_amount
-        member.credit += deposit_amount
+        original_balance = Member.objects.filter(phone=phone_number)[0]['balance']
+        Member.objects.filter(phone=phone_number).update(balance=original_balance+deposit_amount)
+        original_credit = Member.objects.filter(phone=phone_number)[0]['credit']
+        new_credit = original_credit + deposit_amount
+        Member.objects.filter(phone=phone_number).update(credit=new_credit)
+        if original_credit < 1000 and new_credit >= 1000:
+            Member.objects.filter(phone=phone_number).update(member_class=2)
+            Member.objects.filter(phone=phone_number).update(discount=0.85)
+        if original_credit < 2000 and new_credit >= 2000:
+            Member.objects.filter(phone=phone_number).update(member_class=3)
+            Member.objects.filter(phone=phone_number).update(discount=0.75)
         result = 'success'
         return JsonResponse({'result':result})
