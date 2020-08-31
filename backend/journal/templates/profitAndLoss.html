@@ -1,0 +1,19 @@
+{% block content %}
+
+<div>
+  <h2>Monthly Profit & Loss Analysis</h2>
+</div>
+
+<div>
+  {% for data in data %}
+  <ul style="border: 2px solid black">
+    <li>Month: {{data.month}}</li>
+    <li>Revenue: {{data.revenue}}</li>
+    <li>Cost: {{data.cost}}</li>
+    <li>Net Profit: {{data.net_profit}}</li>
+    <li>Balance: {{data.balance}}</li>
+  </ul>
+  {% endfor %}
+</div>
+
+{% endblock content %}
