@@ -4,6 +4,7 @@ from client_management.models import discount_policy
 from client_management.models import Member
 from django.core import serializers
 import datetime
+import json
 
 
 def discount(request):
@@ -13,8 +14,11 @@ def discount(request):
     result_start = result.values('start_date')[0]['start_date']    # 取出这行数据的开始日期
     result_end = result.values('end_date')[0]['end_date']          # 取出这行数据的截止日期
     today = datetime.date.today()
+    policy = result.values('policy_content')[0]
+    policy_json = json.dumps(policy, ensure_ascii=False)           # dict数据类型转为json类型，同时确保汉字的正常显示
+
     if result_start < today and result_end > today:                # 若今日日期在这行数据有效期内，返回该优惠策略的内容
-        return HttpResponse(result.values('policy_content')[0]['policy_content'])
+        return HttpResponse(policy_json)
     else:
         return HttpResponse(None)
 
