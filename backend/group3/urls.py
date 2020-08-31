@@ -18,11 +18,11 @@ from journal.views import daily, monthly, profitAndLoss     #Journal.Views의 fu
 from django.urls import path, include
 from client_management.views import discount  # 虽然报错，但能成功导入
 from client_management.views import add_credit
-from financials.views import direct_cost_calculation
+from financials.views import daily_net_change
 
 urlpatterns = [
     path('discount_policy/', discount),         # 回给G1的优惠信息网址
-    path('direct_cost_calculation/', direct_cost_calculation),  # 今日直接成本查询
+    path('daily_net_change', daily_net_change),  # 今日日结净变化查询
     path('add_credit/', add_credit),            # 消费增加积分
     path('daily/', daily),                      # Daily Journal page  
     path('monthly/', monthly),                  # Monthly Journal page
@@ -30,5 +30,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('members/', include('members.urls')), # 增删查改会员信息
     path('table_payment_done/',include('table_payment_done.urls')), # 回给1组交易确认
-    path('transactions/',include('transaction.urls'))
+    path('transactions/',include('transaction.urls')),
+    path('g3/',include('g3.urls')),
 ]
