@@ -29,5 +29,6 @@ urlpatterns = [
     path('monthly_analysis/', profitAndLoss),   # Monthly Profit & Loss analysis page
     path('admin/', admin.site.urls),
     path('members/', include('members.urls')), # 增删查改会员信息
-    path('table_payment_done/',include('table_payment_done.urls')) # 回给1组交易确认
+    path('table_payment_done/',include('table_payment_done.urls')), # 回给1组交易确认
+    path('g3/',include('g3.urls')) # 各种回应函数
 ]
