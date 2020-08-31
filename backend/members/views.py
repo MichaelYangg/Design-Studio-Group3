@@ -1,8 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
-from django.http import Http404
 from client_management.models import Member
 
 # Create your views here.
@@ -40,20 +39,38 @@ def add_member(request):
     member_info = {'name': 'yang', 'phone':'123456'}
     first_name = member_info['name']
     phone_number = member_info['phone']
-    Member.objects.create(phone=phone_number,first_name=first_name)
-    # 这里有一些问题，首先前端传回的手机号最好应该是BigInt的格式
-    # 第二名字需要确认last name/first name
-    # 第三其他的数据怎么补充
-    result = 'success'
+    # 判断新增会员是否已存在
+    try:
+        mem = Member.objects.get(phone=phone_number)
+        result = 'fail'
+    except:
+        Member.objects.create(phone=phone_number,first_name=first_name)
+        # 这里有一些问题，首先前端传回的手机号最好应该是BigInt的格式
+        # 第二名字需要确认last name/first name
+        # 第三其他的数据怎么补充
+        result = 'success'
     return JsonResponse({'result':result})
 
 def delete_member(request):
     # member_info = request.GET
     member_info = {'phone':'123456'}
-    mem = Member.objects.get(phone=member_info['phone'])
-    mem.delete()
-    # 这里不需要姓名
-    result = 'success'
+    try:
+        mem = Member.objects.get(phone=member_info['phone'])
+        mem.delete()
+        # 这里不需要姓名
+        result = 'success'
+    except:
+        result = 'fail'
+    return JsonResponse({'result':result})
+
+def change_member(request):
+    # member_info = request.GET
+    member_info = {'phone':'123456'}
+    try:
+        member = Member.objects.get(phone=member_info['phone'])
+        result = 'success'
+    except:
+        result = 'fail'
     return JsonResponse({'result':result})
 
 def deposit(request,phone_number):
