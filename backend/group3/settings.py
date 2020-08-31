@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'journal',
     'members.apps.MembersConfig',
     'table_payment_done.apps.TablePaymentDoneConfig',
+    'g3.apps.G3Config',
 ]
 
 MIDDLEWARE = [
