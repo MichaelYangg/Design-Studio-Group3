@@ -4,6 +4,7 @@ from client_management.models import discount_policy
 from client_management.models import Member
 from django.core import serializers
 import datetime
+import json
 
 
 def discount(request):
@@ -13,16 +14,27 @@ def discount(request):
     result_start = result.values('start_date')[0]['start_date']    # 取出这行数据的开始日期
     result_end = result.values('end_date')[0]['end_date']          # 取出这行数据的截止日期
     today = datetime.date.today()
+    policy = result.values('policy_content')[0]
+    policy_json = json.dumps(policy, ensure_ascii=False)           # dict数据类型转为json类型，同时确保汉字的正常显示
+
     if result_start < today and result_end > today:                # 若今日日期在这行数据有效期内，返回该优惠策略的内容
-        return HttpResponse(result.values('policy_content')[0]['policy_content'])
+        return HttpResponse(policy_json)
     else:
         return HttpResponse(None)
 
 
 def add_credit(request):  # 会员消费增加积分
     consumption = 100     # 此数值目前仅用于测试，日后需要修改，应为计算出的用户应付的价格
-    phone = 12345678900   # 此数值目前仅用于测试，日后需要修改，应为计算出的用户应付的价格
-    target = Member.objects.filter(phone=phone)
+    phone = 12345678900   # 此数值目前仅用于测试，日后需要修改，应为用户电话号码
+    target = member.objects.filter(phone=phone)
     original_credit = target.values('credit')[0]['credit']
-    Member.objects.filter(phone=phone).update(credit = original_credit + consumption)  # 消费120
+    new_credit = original_credit + consumption
+    member.objects.filter(phone=phone).update(credit=new_credit)
+    if original_credit < 1000 and new_credit >= 1000:
+        member.objects.filter(phone=phone).update(member_class=2)
+        member.objects.filter(phone=phone).update(discount=0.85)
+    if original_credit < 2000 and new_credit >= 2000:
+        member.objects.filter(phone=phone).update(member_class=3)
+        member.objects.filter(phone=phone).update(discount=0.75)
+
     return HttpResponse('消费增加积分成功！')
