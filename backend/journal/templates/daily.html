@@ -1,0 +1,22 @@
+{% block content %}
+
+<div>
+  <h2>Daily Journal</h2>
+  <form method="POST">
+    {% csrf_token %} {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<div>
+  {% for data in dailyData %}
+  <ul style="border: 2px solid black">
+    <li>Date: {{data.date}}</li>
+    <li>Net Profit: {{data.net_profit}}</li>
+    <li>Account Type: {{data.account_type}}</li>
+    <li>Balance: {{data.balance}}</li>
+  </ul>
+  {% endfor %}
+</div>
+
+{% endblock content %}
