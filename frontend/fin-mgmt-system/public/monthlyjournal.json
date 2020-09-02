@@ -1,0 +1,40 @@
+{
+    "list": [{
+            "month": "2020-08",
+            "revenue": 10000,
+            "cost": 2000,
+            "net_profit": 8000,
+            "balance": 18000,
+            "date": 14,
+            "recorder": "00000082"
+        },
+        {
+            "month": "2019-01",
+            "revenue": 200,
+            "cost": 1000,
+            "net_profit": -800,
+            "balance": 2000,
+            "date": 19,
+            "recorder": "0000116x"
+        },
+        {
+            "month": "2019-02",
+            "revenue": 100,
+            "cost": 2000,
+            "net_profit": -1900,
+            "balance": 100,
+            "date": 18,
+            "recorder": "00000014"
+        },
+        {
+            "month": "2019-03",
+            "revenue": 300,
+            "cost": 1500,
+            "net_profit": -1200,
+            "balance": -1100,
+            "date": 17,
+            "recorder": "0010008s"
+        }
+    ],
+    "pageTotal": 4
+}

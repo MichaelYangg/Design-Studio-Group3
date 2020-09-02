@@ -1,0 +1,40 @@
+{
+    "list": [{
+            "transaction_id": "102865000",
+            "volume": 178.20,
+            "unit": "头",
+            "time_date": "46-13-14-08-2020",
+            "resource": 3,
+            "category": "猪",
+            "explanation": ""
+        },
+        {
+            "transaction_id": "700023448",
+            "volume": -3000,
+            "unit": "斤",
+            "time_date": "55-09-13-11-2019",
+            "resource": 3,
+            "category": "牛",
+            "explanation": ""
+        },
+        {
+            "transaction_id": "100029481",
+            "volume": 50.30,
+            "unit": "斤",
+            "time_date": "30-19-05-12-2019",
+            "resource": 3,
+            "category": "大葱",
+            "explanation": ""
+        },
+        {
+            "transaction_id": "109832916",
+            "volume": -201.10,
+            "unit": "只",
+            "time_date": "25-08-14-03-2020",
+            "resource": 3,
+            "category": "鸡",
+            "explanation": ""
+        }
+    ],
+    "pageTotal": 4
+}

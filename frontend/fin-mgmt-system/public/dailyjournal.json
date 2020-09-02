@@ -1,0 +1,32 @@
+{
+    "list": [{
+            "account_type": "钱",
+            "net_profit": 178.20,
+            "unit": "元",
+            "date": "2020-08-14",
+            "balance": "+2000.12"
+        },
+        {
+            "account_type": "大白菜",
+            "net_profit": -3000,
+            "unit": "吨",
+            "date": "2019-01-19",
+            "balance": -10
+        },
+        {
+            "account_type": "大葱",
+            "net_profit": 15,
+            "unit": "斤",
+            "date": "2019-12-21",
+            "balance":32
+        },
+        {
+            "account_type": "胡萝卜",
+            "net_profit": -12,
+            "unit": "斤",
+            "date": "2020-01-23",
+            "balance": 45
+        }
+    ],
+    "pageTotal": 4
+}
