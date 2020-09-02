@@ -14,8 +14,8 @@ def daily_net_change(request):  # 目前只能手动进行直接成本核算，�
     today_net_change = {}
     for category_dict in category_list:
         category = category_dict['category']
-        unit = transaction.objects.filter(category=category).values('unit')[0]['unit']  # 在数据库中查出这一category的数据使用的unit，用于显示
-        today_category_volume = transaction.objects.filter(time_date__startswith=today, category=category).values('volume')
+        unit = Transaction.objects.filter(category=category).values('unit')[0]['unit']  # 在数据库中查出这一category的数据使用的unit，用于显示
+        today_category_volume = Transaction.objects.filter(time_date__startswith=today, category=category).values('volume')
         # 取出今天发生的，某特定category的交易
         # today_category_volume的数据类型为i个字典，i = 今天发生的该category交易次数
 
