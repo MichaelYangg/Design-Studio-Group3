@@ -10,7 +10,7 @@ def overview(request):
     latest_register_member = Member.objects.order_by('-join_date')[:3]
     member_overview = []
     for i in range(len(latest_register_member)):
-        member_overview[i] = {'phone': latest_register_member[i].phone, 'first_name': latest_register_member[i].first_name}
+        member_overview.append({'phone': latest_register_member[i].phone, 'first_name': latest_register_member[i].first_name})
     return JsonResponse({'result':member_overview})
 
 def detail(request, phone_number):
