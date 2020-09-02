@@ -12,7 +12,7 @@ def overview(request):
             'Transaction ID': latest_transactions[i].transaction_id, 'Volume': latest_transactions[i].volume,
             'Unit': latest_transactions[i].unit, 'Date Time': latest_transactions[i].time_date, 
             'Category': latest_transactions[i].category}
-    return JsonResponse(transaction_overview)
+    return JsonResponse(transaction_overview,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def detail(request, transaction_id):
     try:
@@ -28,7 +28,7 @@ def detail(request, transaction_id):
         tran_info['Resource'] = tran.resource
         tran_info['Category'] = tran.category
         tran_info['Explanation'] = tran.explanation
-        return JsonResponse(tran_info)
+        return JsonResponse(tran_info,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def add_transaction(request):
     # tran_info = request.GET
