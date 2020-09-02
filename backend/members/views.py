@@ -8,10 +8,10 @@ from client_management.models import Member
 
 def overview(request):
     latest_register_member = Member.objects.order_by('-join_date')[:3]
-    member_overview = {}
+    member_overview = []
     for i in range(len(latest_register_member)):
-        member_overview[i] = {'Phone Number': latest_register_member[i].phone, 'Deposit': latest_register_member[i].balance}
-    return JsonResponse(member_overview)
+        member_overview[i] = {'phone': latest_register_member[i].phone, 'first_name': latest_register_member[i].first_name}
+    return JsonResponse({'result':member_overview})
 
 def detail(request, phone_number):
     try:
@@ -20,19 +20,20 @@ def detail(request, phone_number):
         raise Http404("Member does not exist")
     else:
         member_info = {}
-        member_info['Phone Number'] = member.phone
-        member_info['First Name'] = member.first_name
-        member_info['Last Name'] = member.last_name
-        member_info['Gender'] = member.gender
-        member_info['Nation'] = member.nation
-        member_info['Discount'] = member.discount
-        member_info['Credit'] = member.credit
-        member_info['Join Date'] = member.join_date
-        member_info['Address'] = member.address
-        member_info['Email'] = member.email
-        member_info['Birthday'] = member.birthday
-        member_info['Level'] = member.member_class
-        return JsonResponse(member_info)
+        member_info['phone'] = member.phone
+        member_info['first_name'] = member.first_name
+        member_info['last_name'] = member.last_name
+        member_info['sex'] = member.gender
+        member_info['nation'] = member.nation
+        member_info['discount'] = member.discount
+        member_info['member_points'] = member.credit
+        member_info['date_joined'] = member.join_date
+        member_info['address'] = member.address
+        member_info['email'] = member.email
+        member_info['birthday'] = member.birthday
+        member_info['membership_level'] = member.member_class
+        member_info['balance'] = member.balance
+        return JsonResponse({'result':[member_info]})
 
 def add_member(request):
     # member_info = request.GET
