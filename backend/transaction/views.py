@@ -9,8 +9,8 @@ def overview(request):
     transaction_overview = {}
     for i in range(len(latest_transactions)):
         transaction_overview[i] = {
-            'Transaction ID': latest_transactions[i].transaction_id, 'Volume': latest_transactions[i].volume,
-            'Unit': latest_transactions[i].unit, 'Date Time': latest_transactions[i].time_date, 
+            'transaction_id': latest_transactions[i].transaction_id, 'Volume': latest_transactions[i].volume,
+            'Unit': latest_transactions[i].unit, 'date_time': latest_transactions[i].time_date, 
             'Category': latest_transactions[i].category}
     return JsonResponse(transaction_overview,safe=False,json_dumps_params={'ensure_ascii':False})
 
@@ -21,10 +21,10 @@ def detail(request, transaction_id):
         raise Http404("Transaction does not exist")
     else:
         tran_info = {}
-        tran_info['Transaction ID'] = tran.transaction_id
+        tran_info['transaction_id'] = tran.transaction_id
         tran_info['Volume'] = tran.volume
         tran_info['Unit'] = tran.unit
-        tran_info['Date Time'] = tran.time_date
+        tran_info['date_time'] = tran.time_date
         tran_info['Resource'] = tran.resource
         tran_info['Category'] = tran.category
         tran_info['Explanation'] = tran.explanation
