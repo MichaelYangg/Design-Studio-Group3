@@ -11,7 +11,8 @@ def overview(request):
         transaction_overview[i] = {
             'transaction_id': latest_transactions[i].transaction_id, 'Volume': latest_transactions[i].volume,
             'Unit': latest_transactions[i].unit, 'date_time': latest_transactions[i].time_date, 
-            'Category': latest_transactions[i].category}
+            'Category': latest_transactions[i].category, 'Resource': latest_transactions[i].resource,
+            'Explanation': latest_transactions[i].explanation}
     return JsonResponse(transaction_overview,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def detail(request, transaction_id):
