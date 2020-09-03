@@ -1,8 +1,8 @@
 import request from '../utils/request';
 
-export const fetchMonthlyData = monthlyquery => {
+export function fetchMonthlyData(monthlyquery) {
     return request({
-        url: './monthlyjournal.json',
+        url: '/monthlyjournal/',
         method: 'get',
         params: monthlyquery
     });
