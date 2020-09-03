@@ -3,7 +3,7 @@ import datetime
 # Create your models here.
 
 
-class discount_policy(models.Model):
+class DiscountPolicy(models.Model):
     policy_id = models.AutoField(primary_key=True)
     policy_content = models.CharField(max_length=500)
     start_date = models.DateField(default=datetime.date.today())
