@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { fetchDailyData } from '../../api/dailyindex';
+import { fetchDailyData } from '../../api/dailyjournal';
 export default {
     name: 'dailyjournal',
     data() {
