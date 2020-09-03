@@ -9,10 +9,10 @@ def overview(request):
     transaction_overview = {}
     for i in range(len(latest_transactions)):
         transaction_overview[i] = {
-            'transaction_id': latest_transactions[i].transaction_id, 'Volume': latest_transactions[i].volume,
-            'Unit': latest_transactions[i].unit, 'date_time': latest_transactions[i].time_date, 
-            'Category': latest_transactions[i].category, 'Resource': latest_transactions[i].resource,
-            'Explanation': latest_transactions[i].explanation}
+            'transaction_id': latest_transactions[i].transaction_id, 'volume': latest_transactions[i].volume,
+            'unit': latest_transactions[i].unit, 'date_time': latest_transactions[i].time_date, 
+            'category': latest_transactions[i].category, 'resource': latest_transactions[i].resource,
+            'explanation': latest_transactions[i].explanation}
     return JsonResponse(transaction_overview,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def detail(request, transaction_id):
@@ -23,12 +23,12 @@ def detail(request, transaction_id):
     else:
         tran_info = {}
         tran_info['transaction_id'] = tran.transaction_id
-        tran_info['Volume'] = tran.volume
-        tran_info['Unit'] = tran.unit
+        tran_info['volume'] = tran.volume
+        tran_info['unit'] = tran.unit
         tran_info['date_time'] = tran.time_date
-        tran_info['Resource'] = tran.resource
-        tran_info['Category'] = tran.category
-        tran_info['Explanation'] = tran.explanation
+        tran_info['resource'] = tran.resource
+        tran_info['category'] = tran.category
+        tran_info['explanation'] = tran.explanation
         return JsonResponse(tran_info,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def add_transaction(request):
