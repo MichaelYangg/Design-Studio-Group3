@@ -80,8 +80,8 @@ def deposit(request,phone_number):
     except Member.DoesNotExist:
         raise Http404("Member does not exist")
     else:
-        # deposit_amount = request.GET['balance'] # 待和前端确认修改
-        deposit_amount = 10
+        deposit_amount = request.POST['balance']
+        # deposit_amount = 10
         original_balance = Member.objects.filter(phone=phone_number)[0]['balance']
         Member.objects.filter(phone=phone_number).update(balance=original_balance+deposit_amount)
         original_credit = Member.objects.filter(phone=phone_number)[0]['credit']
