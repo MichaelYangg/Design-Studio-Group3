@@ -11,7 +11,7 @@ def overview(request):
     member_overview = []
     for i in range(len(latest_register_member)):
         member_overview.append({'phone': latest_register_member[i].phone, 'first_name': latest_register_member[i].first_name})
-    return JsonResponse({'result':member_overview})
+    return JsonResponse({'result':member_overview},json_dumps_params={'ensure_ascii':False})
 
 def detail(request, phone_number):
     try:
@@ -33,7 +33,7 @@ def detail(request, phone_number):
         member_info['birthday'] = member.birthday
         member_info['membership_level'] = member.member_class
         member_info['balance'] = member.balance
-        return JsonResponse({'result':[member_info]})
+        return JsonResponse({'result':[member_info]},json_dumps_params={'ensure_ascii':False})
 
 def add_member(request):
     # member_info = request.GET
