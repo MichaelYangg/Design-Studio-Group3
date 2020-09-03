@@ -138,7 +138,7 @@
 </template>
 
 <script>
-import { fetchData } from '../../api/index';
+import { fetchData } from '../../api/transactions';
 export default {
     name: 'transaction',
     data() {

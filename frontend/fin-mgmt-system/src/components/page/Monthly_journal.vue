@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { fetchMonthlyData } from '../../api/monthlyindex';
+import { fetchMonthlyData } from '../../api/monthlyjournal';
 export default {
     name: 'monthlyjournal',
     data() {
