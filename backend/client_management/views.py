@@ -25,25 +25,4 @@ def discount(request):
         return HttpResponse(None)
 
 
-def add_credit(request):  # 会员消费增加积分
-    # add_credit_info = request.GET
-    add_credit_info = {'volume': 100, 'phone': 12345678900}  # 此数值仅用于测试
-    consumption = add_credit_info['volume']
-    phone = add_credit_info['phone']
-    try:
-        target = Member.objects.filter(phone=phone)
-        original_credit = target.values('credit')[0]['credit']
-        new_credit = original_credit + consumption
-        Member.objects.filter(phone=phone).update(credit=new_credit)
-        if original_credit < 1000 and new_credit >= 1000:
-            Member.objects.filter(phone=phone).update(member_class=2)
-            Member.objects.filter(phone=phone).update(discount=0.85)
-        if original_credit < 2000 and new_credit >= 2000:
-            Member.objects.filter(phone=phone).update(member_class=3)
-            Member.objects.filter(phone=phone).update(discount=0.75)
-        resultsuccess = json.dumps({'result': 'success'})
-        return HttpResponse(resultsuccess)
 
-    except Exception:
-        resultfail = json.dumps({'result': 'fail'})
-        return HttpResponse(resultfail)
