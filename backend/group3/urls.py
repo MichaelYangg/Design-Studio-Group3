@@ -17,13 +17,11 @@ from django.contrib import admin
 from journal.views import daily, monthly, profitAndLoss     #Journal.Views의 function 호출
 from django.urls import path, include
 from client_management.views import discount  # 虽然报错，但能成功导入
-from client_management.views import add_credit
 from financials.views import daily_net_change
 
 urlpatterns = [
     path('discount_policy/', discount),         # 回给G1的优惠信息网址
     path('daily_net_change', daily_net_change),  # 今日日结净变化查询
-    path('add_credit/', add_credit),            # 消费增加积分
     path('daily/', daily),                      # Daily Journal page  
     path('monthly/', monthly),                  # Monthly Journal page
     path('monthly_analysis/', profitAndLoss),   # Monthly Profit & Loss analysis page
