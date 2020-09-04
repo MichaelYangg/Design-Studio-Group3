@@ -63,14 +63,27 @@ def delete_member(request):
     return JsonResponse({'result':result})
 
 def change_member(request):
-    # member_info = request.GET
-    member_info = {'phone':'123456'}
+    member_info = request.POST
+    # member_info = {'phone':'123456'}
     try:
         member = Member.objects.get(phone=member_info['phone'])
+    except Member.DoesNotExist:
+        raise Http404("Transaction does not exist")
+    else:
+        Member.objects.filter(phone=member_info['phone']).update(first_name=member_info['first_name'])
+        Member.objects.filter(phone=member_info['phone']).update(last_name=member_info['last_name'])
+        Member.objects.filter(phone=member_info['phone']).update(gender=member_info['sex'])
+        Member.objects.filter(phone=member_info['phone']).update(nation=member_info['nation'])
+        Member.objects.filter(phone=member_info['phone']).update(discount=member_info['discount'])
+        Member.objects.filter(phone=member_info['phone']).update(credit=member_info['member_points'])
+        Member.objects.filter(phone=member_info['phone']).update(join_date=member_info['date_joined'])
+        Member.objects.filter(phone=member_info['phone']).update(address=member_info['address'])
+        Member.objects.filter(phone=member_info['phone']).update(email=member_info['email'])
+        Member.objects.filter(phone=member_info['phone']).update(birthday=member_info['birthday'])
+        Member.objects.filter(phone=member_info['phone']).update(member_class=member_info['member_level'])
+        Member.objects.filter(phone=member_info['phone']).update(balance=member_info['balance'])
         result = 'success'
-    except:
-        result = 'fail'
-    return JsonResponse({'result':result})
+        return JsonResponse({'result':result})
 
 def deposit(request,phone_number):
     try:
