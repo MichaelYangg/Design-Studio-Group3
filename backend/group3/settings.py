@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'client_management',
     'journal',
     'members.apps.MembersConfig',
-    'table_payment_done.apps.TablePaymentDoneConfig',
     'transaction.apps.TransactionConfig',
     'g3.apps.G3Config',
     'corsheaders'
