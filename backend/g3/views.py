@@ -26,7 +26,7 @@ def payment_done_add_credit(request):
     payment = {'method': 'cash', 'discount_price': 100, 'time': '2020-09-04 19:00:00', 'phone': 12345678900}  # 此数值仅用于测试，具体看G1的字段名
     volume = payment['discount_price']
     phone = payment['phone']
-
+    # 消费增加积分
     try:
         target = Member.objects.filter(phone=phone)
     finally:
@@ -39,6 +39,14 @@ def payment_done_add_credit(request):
         if original_credit < 2000 and new_credit >= 2000:
             Member.objects.filter(phone=phone).update(member_class=3)
             Member.objects.filter(phone=phone).update(discount=0.75)
-
-
-    return JsonResponse({'result':'success'})
+    # 记账
+    time = payment['time']
+    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_id = current_tran.transaction_id
+    new_id = current_id + 1
+    try:
+        Transaction.objects.create(transaction_id=new_id,volume=volume,unit='元',resource=0,category='财务',explanation='无')
+        payment_status = 0
+    except:
+        payment_status = 1
+    return JsonResponse({'payment_status': payment_status})
