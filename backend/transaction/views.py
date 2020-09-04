@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse, Http404
 # Create your views here.
 
 def overview(request):
-    latest_transactions = Transaction.objects.order_by('-time_date')[:3]
+    latest_transactions = Transaction.objects.order_by('-time_date')[:10]
     transaction_overview = {}
     for i in range(len(latest_transactions)):
         transaction_overview[i] = {
