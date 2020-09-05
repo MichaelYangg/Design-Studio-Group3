@@ -88,6 +88,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
+#         'NAME': 'django_mysql', # 数据库名
+#         'USER': 'root', # 账号
+#         'PASSWORD': 'root', # 密码
+#         'HOST': '127.0.0.1', # HOST
+#         'POST': 8083, # 端口
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
