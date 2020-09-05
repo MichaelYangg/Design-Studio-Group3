@@ -22,7 +22,7 @@ def other_cost(request):
 
 
 def payment_done_add_credit(request):
-    # add_credit_info = request.GET
+    # payment = request.POST
     payment = {'method': 'cash', 'discount_price': 100, 'time': '2020-09-04 19:00:00', 'phone': 12345678900}  # 此数值仅用于测试，具体看G1的字段名
     volume = payment['discount_price']
     phone = payment['phone']
@@ -45,8 +45,37 @@ def payment_done_add_credit(request):
     current_id = current_tran.transaction_id
     new_id = current_id + 1
     try:
-        Transaction.objects.create(transaction_id=new_id,volume=volume,unit='元',resource=0,category='财务',explanation='无')
+        Transaction.objects.create(transaction_id=new_id,volume=volume,unit='元',resource=0,category='财务',explanation='无',time_date=time)
         payment_status = 0
     except:
         payment_status = 1
     return JsonResponse({'payment_status': payment_status})
+
+def stock_in(request):
+    xmlinfo = request.POST
+    data = xmltodict.parse(xmlinfo)
+    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_id = current_tran.transaction_id
+    new_id = current_id + 1
+    try:
+        Transaction.objects.create(transaction_id=new_id,volume=data['amount'],unit=data['unit'],resource=2,category=data['mName'],explanation='无')
+        cost = float(data['price']) * float(data['amount'])
+        Transaction.objects.create(transaction_id=new_id+1,volume=-cost,unit='元',resource=2,category='财务',explanation='无')
+        result = 'success'
+    except:
+        result = 'fail'
+    return JsonResponse({'result':result})
+
+def stock_out(request):
+    xmlinfo = request.POST
+    data = xmltodict.parse(xmlinfo)
+    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_id = current_tran.transaction_id
+    new_id = current_id + 1
+    try:
+        Transaction.objects.create(transaction_id=new_id,volume=-float(data['amount']),unit=data['unit'],resource=2,category=data['mName'],explanation='无')
+        result = 'success'
+    except:
+        result = 'fail'
+    return JsonResponse({'result':result})
+
