@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse, Http404
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
 from client_management.models import Member
+from financials.models import Transaction
 
 # Create your views here.
 
@@ -63,6 +64,7 @@ def delete_member(request):
     return JsonResponse({'result':result})
 
 def change_member(request):
+    result = 'fail'
     member_info = request.POST
     # member_info = {'phone':'123456'}
     try:
@@ -83,9 +85,10 @@ def change_member(request):
         Member.objects.filter(phone=member_info['phone']).update(member_class=member_info['member_level'])
         Member.objects.filter(phone=member_info['phone']).update(balance=member_info['balance'])
         result = 'success'
-        return JsonResponse({'result':result})
+    return JsonResponse({'result':result})
 
 def deposit(request,phone_number):
+    result = 'fail'
     try:
         member = Member.objects.get(phone=phone_number)
     except Member.DoesNotExist:
@@ -104,5 +107,9 @@ def deposit(request,phone_number):
         if original_credit < 2000 and new_credit >= 2000:
             Member.objects.filter(phone=phone_number).update(member_class=3)
             Member.objects.filter(phone=phone_number).update(discount=0.75)
+        current_tran = Transaction.objects.order_by('-time_date')[0]
+        current_id = current_tran.transaction_id
+        new_id = current_id + 1
+        Trasaction.objects.create(transaction_id=new_id,volume=deposit_amount,unit='元',category='财务',resource=1,explanation='无')
         result = 'success'
-        return JsonResponse({'result':result})
+    return JsonResponse({'result':result})
