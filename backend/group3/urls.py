@@ -28,5 +28,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('members/', include('members.urls')), # 增删查改会员信息
     path('transactions/',include('transaction.urls')),
-    path('g3/',include('g3.urls')),
+    path('',include('g3.urls')),
 ]
