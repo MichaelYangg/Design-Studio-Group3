@@ -98,7 +98,7 @@ def change_member(request):
 def deposit(request,phone_number):
     result = 'fail'
     try:
-        member = Member.objects.get(phone=phone_number)
+        member = Member.objects.filter(phone=phone_number).values()[0]
     except Member.DoesNotExist:
         raise Http404("Member does not exist")
     else:
