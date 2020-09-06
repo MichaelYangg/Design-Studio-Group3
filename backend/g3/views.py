@@ -23,9 +23,9 @@ def other_cost(request):
 
 def payment_done_add_credit(request):
     # payment = request.POST
-    payment = {'method': 'cash', 'discount_price': 100, 'time': '2020-09-04 19:00:00', 'phone': 12345678900}  # 此数值仅用于测试，具体看G1的字段名
+    payment = {'payment_method': 'cash', 'discount_price': 100, 'time': '2020-09-04 19:00:00', 'telephone': 12345678900}  # 此数值仅用于测试，具体看G1的字段名
     volume = payment['discount_price']
-    phone = payment['phone']
+    phone = payment['telephone']
     # 消费增加积分
     try:
         target = Member.objects.filter(phone=phone)
