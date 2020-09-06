@@ -5,15 +5,15 @@ from django.http import HttpResponse, JsonResponse, Http404
 # Create your views here.
 
 def overview(request):
-    latest_transactions = Transaction.objects.order_by('-time_date')[:10]
-    transaction_overview = {}
-    for i in range(len(latest_transactions)):
-        transaction_overview[i] = {
-            'transaction_id': latest_transactions[i].transaction_id, 'volume': latest_transactions[i].volume,
-            'unit': latest_transactions[i].unit, 'date_time': latest_transactions[i].time_date, 
-            'category': latest_transactions[i].category, 'resource': latest_transactions[i].resource,
-            'explanation': latest_transactions[i].explanation}
-    return JsonResponse(transaction_overview,safe=False,json_dumps_params={'ensure_ascii':False})
+    amount = 10
+    latest_transactions = Transaction.objects.order_by('-time_date')[:amount]
+    transaction_overview = []
+    for tran in latest_transactions:
+        transac = {'transaction_id': tran.transaction_id, 'volume': tran.volume, 'unit': tran.unit, 
+            'date_time': tran.time_date, 'category': tran.category, 'resource': tran.resource, 'explanation': tran.explanation}
+        transaction_overview.append(transac)
+    overview = {'list':transaction_overview,'pageTotal':len(transaction_overview)}
+    return JsonResponse(overview,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def detail(request, transaction_id):
     try:
