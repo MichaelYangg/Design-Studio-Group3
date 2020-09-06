@@ -28,7 +28,7 @@ def daily_net_change(request):  # 读daily，读transaction，写daily
         except:
             today_total_volume = 0
 
-        Daily.objects.create(id=Daily.objects.all().count()+2, account_type=category,       # 新id为行数+2
+        Daily.objects.create(id=Daily.objects.all().count(), account_type=category,       # 新id为行数
                                  net_profit=today_total_volume, unit=unit, date=today, balance=balance)
 
     return HttpResponse('result:success')
