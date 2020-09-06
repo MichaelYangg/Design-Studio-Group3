@@ -37,7 +37,10 @@ def detail(request, phone_number):
         return JsonResponse({'result':[member_info]},json_dumps_params={'ensure_ascii':False})
 
 def add_member(request):
-    member_info = request.POST
+    if request.method == 'POST':
+        member_info = request.POST
+    else:
+        member_info = request.GET
     # member_info = {'phone':'123456'}
     phone_number = member_info['phone']
     first_name = member_info['first_name']
@@ -52,12 +55,14 @@ def add_member(request):
     return JsonResponse({'result':result})
 
 def delete_member(request):
-    member_info = request.POST
+    if request.method == 'POST':
+        member_info = request.POST
+    else:
+        member_info = request.GET
     # member_info = {'phone':'123456'}
     try:
         mem = Member.objects.get(phone=member_info['phone'])
         mem.delete()
-        # 这里不需要姓名
         result = 'success'
     except:
         result = 'fail'
