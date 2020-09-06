@@ -103,6 +103,7 @@ def deposit(request,phone_number):
         raise Http404("Member does not exist")
     else:
         deposit_amount = request.POST['balance']
+        deposit_amount = int(deposit_amount)
         # deposit_amount = 10
         original_balance = member['balance']
         original_credit = member['credit']
