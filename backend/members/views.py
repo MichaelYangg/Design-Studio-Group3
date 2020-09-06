@@ -24,7 +24,8 @@ def detail(request, phone_number):
         member_info['phone'] = member.phone
         member_info['first_name'] = member.first_name
         member_info['last_name'] = member.last_name
-        member_info['sex'] = member.gender
+        if member.gender == 0: member_info['sex'] = '男'
+        else: member_info['sex'] = '女'
         member_info['nation'] = member.nation
         member_info['discount'] = member.discount
         member_info['member_points'] = member.credit
@@ -79,7 +80,9 @@ def change_member(request):
     else:
         Member.objects.filter(phone=member_info['phone']).update(first_name=member_info['first_name'])
         Member.objects.filter(phone=member_info['phone']).update(last_name=member_info['last_name'])
-        Member.objects.filter(phone=member_info['phone']).update(gender=member_info['sex'])
+        if member_info['sex'] == '男': gender = 0
+        else: gender = 1
+        Member.objects.filter(phone=member_info['phone']).update(gender=gender)
         Member.objects.filter(phone=member_info['phone']).update(nation=member_info['nation'])
         Member.objects.filter(phone=member_info['phone']).update(discount=member_info['discount'])
         Member.objects.filter(phone=member_info['phone']).update(credit=member_info['member_points'])
@@ -87,7 +90,7 @@ def change_member(request):
         Member.objects.filter(phone=member_info['phone']).update(address=member_info['address'])
         Member.objects.filter(phone=member_info['phone']).update(email=member_info['email'])
         Member.objects.filter(phone=member_info['phone']).update(birthday=member_info['birthday'])
-        Member.objects.filter(phone=member_info['phone']).update(member_class=member_info['member_level'])
+        Member.objects.filter(phone=member_info['phone']).update(member_class=member_info['membership_level'])
         Member.objects.filter(phone=member_info['phone']).update(balance=member_info['balance'])
         result = 'success'
     return JsonResponse({'result':result})
