@@ -101,9 +101,9 @@ def deposit(request,phone_number):
     else:
         deposit_amount = request.POST['balance']
         # deposit_amount = 10
-        original_balance = Member.objects.filter(phone=phone_number)[0]['balance']
+        original_balance = Member.objects.get(phone=phone_number)['balance']
         Member.objects.filter(phone=phone_number).update(balance=original_balance+deposit_amount)
-        original_credit = Member.objects.filter(phone=phone_number)[0]['credit']
+        original_credit = Member.objects.get(phone=phone_number)['credit']
         new_credit = original_credit + deposit_amount
         Member.objects.filter(phone=phone_number).update(credit=new_credit)
         if original_credit < 1000 and new_credit >= 1000:
