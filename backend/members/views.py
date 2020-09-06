@@ -115,6 +115,6 @@ def deposit(request,phone_number):
         current_tran = Transaction.objects.order_by('-time_date')[0]
         current_id = current_tran.transaction_id
         new_id = current_id + 1
-        Trasaction.objects.create(transaction_id=new_id,volume=deposit_amount,unit='元',category='财务',resource=1,explanation='无')
+        Transaction.objects.create(transaction_id=new_id,volume=deposit_amount,unit='元',category='财务',resource=1,explanation='无')
         result = 'success'
     return JsonResponse({'result':result})
