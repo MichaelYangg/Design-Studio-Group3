@@ -52,6 +52,7 @@ def add_transaction(request):
     return JsonResponse({'result':result})
 
 def delete_transaction(request):
+    print(request.body)
     data = eval(str(request.body,encoding='utf-8'))
     transaction_id = data['transaction_id']
     try:
