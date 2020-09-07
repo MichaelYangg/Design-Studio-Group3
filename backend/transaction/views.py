@@ -53,6 +53,7 @@ def add_transaction(request):
 
 def delete_transaction(request):
     print(request.body)
+    print(str(request.body,encoding='utf-8'))
     data = eval(str(request.body,encoding='utf-8'))
     transaction_id = data['transaction_id']
     try:
