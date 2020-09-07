@@ -67,7 +67,7 @@ def monthly(request):
             Monthly(net_profit = net_profit, month = date, balance = balance + net_profit, date = date, revenue = revenue, cost = cost, recorder = "1").save()
     else:
         form = MonthlyFrom()
-  return render(request, 'monthly.html', {'monthlyData':json.dumps(data), 'form':form})
+    return render(request, 'monthly.html', {'monthlyData':json.dumps(data), 'form':form})
 
 # Monthly Analysis에 대한 View
 def profitAndLoss(request):
@@ -100,4 +100,4 @@ def profitAndLoss(request):
             data[i]['result'] = 'loss'
         else:
             data[i]['result'] = 'none'
-   return render(request, 'profitAndLoss.html', {'data': json.dumps(data)})
+        return render(request, 'profitAndLoss.html', {'data': json.dumps(data)})
