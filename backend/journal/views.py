@@ -3,7 +3,7 @@ from django.urls import path
 from django.db.models import Sum
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from journal.models import Daily, Monthly
 from .forms import DailyFrom, MonthlyFrom
 from . import views
@@ -42,6 +42,7 @@ def daily(request):
         form = DailyFrom()
     
     return render(request, 'daily.html', {'dailyData': data, 'form': form})
+    # return JsonResponse({'dailyData': data, 'form': form})
 
 # Monthly Journal에 대한 View
 def monthly(request):
@@ -64,6 +65,7 @@ def monthly(request):
     else:
         form = MonthlyFrom()
     return render(request, 'monthly.html', {'monthlyData':data, 'form':form})
+    # return JsonResponse({'monthlyData': data, 'form': form})
 
 # Monthly Analysis에 대한 View
 def profitAndLoss(request):
