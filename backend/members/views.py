@@ -116,7 +116,7 @@ def deposit(request,phone_number):
         if original_credit < 2000 and new_credit >= 2000:
             Member.objects.filter(phone=phone_number).update(member_class=3)
             Member.objects.filter(phone=phone_number).update(discount=0.75)
-        current_tran = Transaction.objects.order_by('-time_date')[0]
+        current_tran = Transaction.objects.order_by('-transaction_id')[0]
         current_id = current_tran.transaction_id
         new_id = current_id + 1
         Transaction.objects.create(transaction_id=new_id,volume=deposit_amount,unit='元',category='财务',resource=1,explanation='无')
