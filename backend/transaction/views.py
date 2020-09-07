@@ -38,6 +38,7 @@ def add_transaction(request):
     else:
         data = request.GET
     print(data)
+    print(request.body)
     assert 'list' in data
     tran_info = data['list'][0]
     # tran_info = {'transaction_id':'888888','volume':'20'}
