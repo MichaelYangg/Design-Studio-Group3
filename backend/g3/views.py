@@ -10,7 +10,7 @@ def other_cost(request):
     xmlinfo = request.POST
     data = xmltodict.parse(xmlinfo)
     cost = data['cost']
-    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
     try:
@@ -41,7 +41,7 @@ def payment_done_add_credit(request):
             Member.objects.filter(phone=phone).update(discount=0.75)
     # 记账
     time = payment['time']
-    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
     try:
@@ -54,7 +54,7 @@ def payment_done_add_credit(request):
 def stock_in(request):
     xmlinfo = request.POST
     data = xmltodict.parse(xmlinfo)
-    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
     try:
@@ -69,7 +69,7 @@ def stock_in(request):
 def stock_out(request):
     xmlinfo = request.POST
     data = xmltodict.parse(xmlinfo)
-    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
     try:
@@ -82,7 +82,7 @@ def stock_out(request):
 def inventory(request):
     xmlinfo = request.POST
     data = xmltodict.parse(xmlinfo)
-    current_tran = Transaction.objects.order_by('-time_date')[0]
+    current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
     try:
