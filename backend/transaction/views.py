@@ -32,8 +32,14 @@ def detail(request, transaction_id):
         return JsonResponse(tran_info,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def add_transaction(request):
-    assert 'list' in request.POST
-    tran_info = request.POST['list'][0]
+    print(request.method)
+    if request.method == 'POST':
+        data = request.POST
+    else:
+        data = request.GET
+    print(data)
+    assert 'list' in data
+    tran_info = data['list'][0]
     # tran_info = {'transaction_id':'888888','volume':'20'}
     transaction_id = tran_info['transaction_id']
     try:
