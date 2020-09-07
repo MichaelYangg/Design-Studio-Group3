@@ -1,16 +1,18 @@
+import json
 from django.shortcuts import render, redirect
 from django.urls import path
 from django.db.models import Sum
 
 # Create your views here.
 from django.http import HttpResponse, JsonResponse
+from django.core import serializers
 from journal.models import Daily, Monthly
 from .forms import DailyFrom, MonthlyFrom
 from . import views
 
 # Daily Journal에 대한 View
 def daily(request):
-    data = Daily.objects.all()
+    data = serializers.serialize ("json", Daily.objects.all())
     # 정보 제출(Submit) 시, Daily(account_type, net_profit, unit, date, balance)의 데이터베이스 저장
     if request.method == 'POST':
         form = DailyFrom(request.POST)
@@ -41,12 +43,13 @@ def daily(request):
     else:
         form = DailyFrom()
     
-    return render(request, 'daily.html', {'dailyData': data, 'form': form})
-    # return JsonResponse({'dailyData': data, 'form': form})
+    return render(request, 'daily.html', {'dailyData': json.dumps(data),'form':form})
+
+
 
 # Monthly Journal에 대한 View
 def monthly(request):
-    data = Monthly.objects.all()
+    data = serializers.serialize ("json", Monthly.objects.all())
     # 정보 제출(Submit) 시, Monthly(month, revenue, cost, net_profit, balance, date, recorder)의 데이터베이스 저장
     if request.method == 'POST':
         form = MonthlyFrom(request.POST)
@@ -64,8 +67,7 @@ def monthly(request):
             Monthly(net_profit = net_profit, month = date, balance = balance + net_profit, date = date, revenue = revenue, cost = cost, recorder = "1").save()
     else:
         form = MonthlyFrom()
-    return render(request, 'monthly.html', {'monthlyData':data, 'form':form})
-    # return JsonResponse({'monthlyData': data, 'form': form})
+  return render(request, 'monthly.html', {'monthlyData':json.dumps(data), 'form':form})
 
 # Monthly Analysis에 대한 View
 def profitAndLoss(request):
@@ -98,4 +100,4 @@ def profitAndLoss(request):
             data[i]['result'] = 'loss'
         else:
             data[i]['result'] = 'none'
-    return render(request, 'profitAndLoss.html', {'data': data})
+   return render(request, 'profitAndLoss.html', {'data': json.dumps(data)})
