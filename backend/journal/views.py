@@ -100,4 +100,4 @@ def profitAndLoss(request):
             data[i]['result'] = 'loss'
         else:
             data[i]['result'] = 'none'
-        return render(request, 'profitAndLoss.html', {'data': json.dumps(data)})
+     return render(request, 'profitAndLoss.html', {'data': json.dumps(data)})
