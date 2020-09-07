@@ -35,6 +35,7 @@ def add_transaction(request):
     data = eval(str(request.body,encoding='utf-8'))
     assert 'list' in data
     tran_info = data['list'][0]
+    print(tran_info)
     # tran_info = {'transaction_id':'888888','volume':'20','unit':'元','resource':1,'category':'财务','explanation':'无'}
     transaction_id = tran_info['transaction_id']
     try:
