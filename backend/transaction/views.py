@@ -51,7 +51,8 @@ def add_transaction(request):
     return JsonResponse({'result':result})
 
 def delete_transaction(request):
-    transaction_id = request.POST['transaction_id']
+    data = eval(str(request.body,encoding='utf-8'))
+    transaction_id = data['transaction_id']
     try:
         tran = Transaction.objects.get(transaction_id=transaction_id)
         tran.delete()
@@ -61,7 +62,8 @@ def delete_transaction(request):
     return JsonResponse({'result':result})
 
 def change_transaction(request):
-    tran_info = request.POST['list'][0]
+    data = eval(str(request.body,encoding='utf-8'))
+    tran_info = data['list'][0]
     try:
         tran = Transaction.objects.get(transaction_id=tran_info['transaction_id'])
     except Transaction.DoesNotExist:
