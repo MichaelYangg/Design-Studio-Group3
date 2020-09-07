@@ -43,7 +43,7 @@ def add_transaction(request):
     except:
         try:
             Transaction.objects.create(transaction_id=transaction_id,volume=tran_info['volume'], unit=tran_info['unit'], 
-                        resource=tran_info['resource'],time_date=tran_info['time_date'],category=tran_info['category'], explanation=tran_info['explanation'])
+                        resource=tran_info['resource'],category=tran_info['category'], explanation=tran_info['explanation'])
             # time_date=tran_info['time_date'],
             result = 'success'
         except:
