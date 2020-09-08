@@ -91,11 +91,11 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql', # 数据库引擎
-#         'NAME': 'django_mysql', # 数据库名
+#         'NAME': 'group3', # 数据库名
 #         'USER': 'root', # 账号
-#         'PASSWORD': 'root', # 密码
+#         'PASSWORD': 'sem123', # 密码
 #         'HOST': '127.0.0.1', # HOST
-#         'POST': 8083, # 端口
+#         'PORT': 8083, # 端口
 #     }
 # }
 
