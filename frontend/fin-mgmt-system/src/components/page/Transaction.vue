@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.transaction_id" placeholder="输入交易编号" class="handle-input mr10"></el-input>
+                <el-input v-model="query.transaction_id" placeholder="输入交易编号" clearable @clear="handleSearch" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
           <el-button type="primary" @click="dialogVisible=true">添加交易信息</el-button>
             </div>
@@ -160,7 +160,9 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
+            search:'',
             tableData: [],
+            searchData: [],
             dialogVisible: false,
             editVisible: false,
             deleteVisible: false,
@@ -168,6 +170,9 @@ export default {
             form: {},
             idx: -1,
             id: -1,
+    // filters: {
+    //   transaction_id:''
+    // },
     addTransactionForm: {
         transaction_id:'',
         volume:'',
@@ -257,17 +262,20 @@ export default {
                 this.pageTotal = res.pageTotal;
             });
         },
+
         // 触发搜索按钮
-        handleSearch() {
-            this.$set(this.query, 'transaction_id');
-            queryTransaction(this.query.transaction_id).then(res => {
-                var list = [];
-                list.append(res);
-                console.log(list);
-                this.tableData = list;
-                this.pageTotal = 1;
-            })    
-            
+        handleSearch () {
+
+            // this.$set(this.query, 'transaction_id');
+            // queryTransaction(this.query.transaction_id).then(res => {
+            //     var list = [];
+            //     list.append(res);
+            //     console.log(list);
+            //     this.tableData = res.list;
+            //     this.pageTotal = 1;
+            // })
+            // .catch( () => {
+            // })   
             // this.getData();
         },
         // 新增操作
@@ -280,27 +288,30 @@ export default {
                addList(this.addTransactionForm)
                .then(res => {
                  if (res.data.meta.status === 201) {
-                   this.$message({
-                     type: 'success',
-                     message: '新增交易信息成功'
-                   })
+                   this.$message.success('新增交易信息成功')
+                  //  ({
+                  //    type: 'success',
+                  //    message: '新增交易信息成功'
+                  //  })
                    //数据刷新
                    this.dialogVisible = false
                    //表单元素的数据重置
                    this.$refs.addTransactionFormRef.resetFields()
                    this.init()
                  } else {
-                   this.$message({
-                     type: 'error',
-                     message: '新增交易信息失败'
-                   })
+                   this.$message.error('新增交易信息失败')
+                  //  ({
+                  //    type: 'error',
+                  //    message: '新增交易信息失败'
+                  //  })
                  }
                })
                   .catch( () => {
-                    this.$message({
-                      type: 'error',
-                      message: '新增交易信息失败'
-                    })
+                    this.$message.info('已取消新增交易信息')
+                    // ({
+                    //   type: 'error',
+                    //   message: '新增交易信息失败'
+                    // })
                   })
             //  } else {
             //    //中止此次请求
@@ -323,24 +334,27 @@ export default {
             deleteList(this.tableData)
             .then(res => {
               if(res.data.meta.status === 200) {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功'
-                })
+                this.$message.success('删除成功');
+                // ({
+                //   type: 'success',
+                //   message: '删除成功'
+                // })
                 this.tableData.splice(index, 1);
               }
             })
             .catch( () => {
-              this.$message({
-                type: 'error',
-                message: '删除失败'
-              })
+              this.$message.error('删除失败');
+              // ({
+              //   type: 'error',
+              //   message: '删除失败'
+              // })
             })
           }).catch( () => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            })
+            this.$message.info('已取消删除');
+            // ({
+            //   type: 'info',
+            //   message: '已取消删除'
+            // })
           })
         },
         // 编辑操作

@@ -7,10 +7,10 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
+            <!-- <div class="handle-box">
                 <el-input v-model="monthlyquery.month" placeholder="输入月度（YYYY-MM）" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-            </div>
+            </div> -->
        
 
             <el-table
@@ -19,7 +19,6 @@
                 class="table"
                 ref="monthlyJournalFormRef"
                 header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
             >
                 <el-table-column type="index" align=center></el-table-column>
                 <el-table-column prop="month" label="月度" align="center"></el-table-column>
@@ -80,11 +79,11 @@ export default {
                 this.pageTotal = res.pageTotal;
             });
         },
-        // 触发搜索按钮
-        handleSearch() {
-            this.$set(this.monthlyquery, 'month');
-            this.getData();
-        },
+        // // 触发搜索按钮
+        // handleSearch() {
+        //     this.$set(this.monthlyquery, 'month');
+        //     this.getData();
+        // },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.monthlyquery, 'pageIndex', val);

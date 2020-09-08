@@ -58,7 +58,7 @@ export function deleteList(data) {
 
 export function queryTransaction(transaction_id) {
     return request({
-        url: '/transactions/' + transaction_id,
+        url: '/transactions/' + transaction_id + '/',
         method: 'get'
     })
 }

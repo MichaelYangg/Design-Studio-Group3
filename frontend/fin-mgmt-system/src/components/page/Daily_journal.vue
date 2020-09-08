@@ -7,11 +7,11 @@
             </el-breadcrumb>
         </div>
         <div class="container">
-            <div class="handle-box">
+            <!-- <div class="handle-box">
                 <el-input v-model="dailyquery.account_type" placeholder="输入账目类别" class="handle-input mr10"></el-input>
                 <el-input v-model="dailyquery.date" placeholder="输入记录日期" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-            </div>
+            </div> -->
             <el-table
                 :data="tableData"
                 border
@@ -71,14 +71,14 @@ export default {
             fetchDailyData(this.dailyquery).then(res => {
                 console.log(res);
                 this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 100;
+                this.pageTotal = res.pageTotal;
             });
         },
-        // 触发搜索按钮
-        handleSearch() {
-            this.$set(this.dailyquery, 'account_type', );
-            this.getData();
-        },
+        // // 触发搜索按钮
+        // handleSearch() {
+        //     this.$set(this.dailyquery, 'account_type', );
+        //     this.getData();
+        // },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.dailyquery, 'pageIndex', val);
