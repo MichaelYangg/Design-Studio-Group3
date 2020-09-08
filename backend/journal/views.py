@@ -12,7 +12,7 @@ from . import views
 
 # Daily Journal的 View
 def daily(request):
-    data = serializers.serialize ("json", Daily.objects.all())
+    data = Daily.objects.all()
     # 输入信息后(Submit) , Daily(account_type, net_profit, unit, date, balance)储存在数据库里
     if request.method == 'POST':
         form = DailyFrom(request.POST)
@@ -43,13 +43,13 @@ def daily(request):
     else:
         form = DailyFrom()
     
-    return render(request, 'daily.html', {'dailyData': data,'form':form})
+    return render(request, 'daily.html', {'dailyData': data, 'form': form})
 
 
 
 # Monthly Journal的 View
 def monthly(request):
-    data = serializers.serialize ("json", Monthly.objects.all())
+    data = Monthly.objects.all()
     # 输入信息后(Submit) , Monthly(month, revenue, cost, net_profit, balance, date, recorder)储存在DB
     if request.method == 'POST':
         form = MonthlyFrom(request.POST)
@@ -68,6 +68,7 @@ def monthly(request):
     else:
         form = MonthlyFrom()
     return render(request, 'monthly.html', {'monthlyData':data, 'form':form})
+
 
 # Monthly Analysis的 View
 def profitAndLoss(request):
