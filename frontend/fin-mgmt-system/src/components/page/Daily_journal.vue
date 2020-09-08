@@ -9,6 +9,7 @@
         <div class="container">
             <div class="handle-box">
                 <el-input v-model="dailyquery.account_type" placeholder="输入账目类别" class="handle-input mr10"></el-input>
+                <el-input v-model="dailyquery.date" placeholder="输入记录日期" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
             <el-table
@@ -17,13 +18,12 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
             >
                 <el-table-column type="index" align=center></el-table-column>
                 <el-table-column prop="account_type" label="账目类别" align="center"></el-table-column>
+                <el-table-column prop="date" label="记录日期" align=center></el-table-column>
                 <el-table-column prop="net_profit" label="盈亏量" align=center></el-table-column>
                 <el-table-column prop="unit" label="计量单位" align=center></el-table-column>
-                <el-table-column prop="date" label="记录日期" align=center></el-table-column>
                 <el-table-column prop="balance" label="结余" align=center></el-table-column>
             </el-table>
             <div class="pagination">
@@ -43,11 +43,15 @@
 <script>
 import { fetchDailyData } from '../../api/dailyjournal';
 export default {
-    name: 'dailyjournal',
+    name: 'Dailyjournal',
     data() {
         return {
             dailyquery: {
                 account_type: '',
+                date:'',
+                net_profit:'',
+                unit:'',
+                balance:'',
                 pageIndex: 1,
                 pageSize: 10
             },
@@ -67,7 +71,7 @@ export default {
             fetchDailyData(this.dailyquery).then(res => {
                 console.log(res);
                 this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
+                this.pageTotal = res.pageTotal || 100;
             });
         },
         // 触发搜索按钮

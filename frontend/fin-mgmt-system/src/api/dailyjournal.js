@@ -1,8 +1,8 @@
 import request from '../utils/request';
 
-export function fetchDailyData(dailyquery) {
+export const fetchDailyData = dailyquery => {
     return request({
-        url: '/dailyjournal/',
+        url: '/daily/',
         method: 'get',
         params: dailyquery
     });

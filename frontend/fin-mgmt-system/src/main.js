@@ -36,5 +36,6 @@ router.beforeEach((to, from, next) => {
 
 new Vue({
     router,
-    render: h => h(App)
+    render: h => h(App),
+    // delimiters: ["{[", "]}"]
 }).$mount('#app');
