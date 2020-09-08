@@ -58,7 +58,7 @@
 
  <!-- 添加交易信息对话框 -->
     <el-dialog
-      title="addOperation"
+      title="新增交易信息"
       :visible.sync="dialogVisible"
       width="80%"
     >
@@ -100,8 +100,8 @@
 
 
         <!-- 修改交易信息弹出框 -->
-        <el-dialog title="editOperation" :visible.sync="editVisible" width="30%">
-            <el-form ref="editTransactionFormRef" :model="editTransactionForm" label-width="70px">
+        <el-dialog title="编辑交易信息" :visible.sync="editVisible" width="30%">
+            <el-form ref="editTransactionFormRef" :model="editTransactionForm" :rules="editTransactionFormRules" label-width="70px">
                 <el-form-item label="交易编号">
                     <el-input v-model="editTransactionForm.transaction_id" disabled></el-input>
                 </el-form-item>
@@ -131,7 +131,7 @@
         </el-dialog>
 
         <!-- 删除交易信息弹出框 -->
-        <el-dialog title="deleteOperation" :visible.sync="deleteVisible" width="30%">
+        <el-dialog title="删除交易信息" :visible.sync="deleteVisible" width="30%">
          <span>确定要删除吗？</span>
          <span slot="footer" class="dialog-footer">
            <el-button @click="deleteVisible=false">取 消</el-button>
@@ -274,7 +274,7 @@ export default {
          addTransaction() {
         // // 二次进行用户数据的验证
           console.log("here in add transaction")
-        //    this.$refs.addTransactionForm.validate(valid => {
+        //    this.$refs.addTransactionFormRef.validate(valid => {
         //      if (valid) {
                //发起新增交易信息请求
                addList(this.addTransactionForm)
@@ -287,7 +287,7 @@ export default {
                    //数据刷新
                    this.dialogVisible = false
                    //表单元素的数据重置
-                   this.$refs.addTransactionForm.resetFields()
+                   this.$refs.addTransactionFormRef.resetFields()
                    this.init()
                  } else {
                    this.$message({
@@ -349,9 +349,13 @@ export default {
             this.editTransactionForm = row;
             this.editVisible = true;
         },
-        //编辑交易信息
-        editTransaction() {
-          this.$refs.editTransactionForm.validate(valid => {
+        // //编辑交易信息
+        // editTransaction() {
+          
+        // },
+        // 编辑交易信息
+        saveEdit() {
+          this.$refs.editTransactionFormRef.validate(valid => {
             if(valid) {
               editList(this.editTransactionForm).then(res => {
                 console.log(res)
@@ -363,7 +367,7 @@ export default {
                   //数据刷新
                   this.editVisible=false
                   // 表单元素的数据重置
-                  this.$refs.editTransactionForm.resetFields()
+                  this.$refs.editTransactionFormRef.resetFields()
                   this.init()
                 } else {
                   this.$message({
@@ -378,12 +382,9 @@ export default {
               return false
             }
           })
-        },
-        // 保存编辑
-        saveEdit() {
-            this.editVisible = false;
-            this.$message.success('修改成功');
-            this.$set(this.tableData, this.form);
+            // this.editVisible = false;
+            // this.$message.success('修改成功');
+            this.$set(this.tableData, this.editTransactionform);
         },
         // 分页导航
         handlePageChange(val) {

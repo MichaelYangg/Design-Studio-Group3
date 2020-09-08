@@ -11,10 +11,10 @@ from .forms import DailyFrom, MonthlyFrom
 from . import views
 import datetime
 
-# Daily Journal에 대한 View
+# # Daily Journal的 View
 # def daily(request):
-#     data = serializers.serialize ("json", Daily.objects.all())
-#     # 정보 제출(Submit) 시, Daily(account_type, net_profit, unit, date, balance)의 데이터베이스 저장
+#     data = Daily.objects.all()
+#     # 输入信息后(Submit) , Daily(account_type, net_profit, unit, date, balance)储存在数据库里
 #     if request.method == 'POST':
 #         form = DailyFrom(request.POST)
 #         if form.is_valid():
@@ -22,7 +22,7 @@ import datetime
 #             unit = form['unit'].value()
 #             date = form['date'].value()
 #             net_profit = (float)(form['net_profit'].value())
-#             # Balance 계산(Profit Balance와 Loss Balance를 따로 구해서, 두 값의 '차이(-)'를 구하면 이전 값까지의 balance를 구함)
+#             # Balance 计算(分别计算Profit Balance和 Loss Balance, 计算两者之差(-)，并计算最更新的balance)
 #             if(data.count() < 1):
 #                 balance = 0.0
 #             else:
@@ -33,7 +33,7 @@ import datetime
 #                 elif(balance_mTotal == None):
 #                     balance_mTotal = 0
 #                 balance = balance_pTotal - balance_mTotal
-#             # Account Type가 'profit(P)' or 'loss(L)'에 따라 DB에 구분 저장
+#             # Account Type根据 'profit(P)' or 'loss(L)'分别储存在DB
 #             if(check == 'P'):
 #                 Daily(account_type = check, net_profit = net_profit, unit = unit, date = date, balance = balance + net_profit).save()
 #             elif(check == 'L'):
@@ -44,8 +44,7 @@ import datetime
 #     else:
 #         form = DailyFrom()
     
-#     return render(request, 'daily.html', {'dailyData': json.dumps(data),'form':form})
-
+#     return render(request, 'daily.html', {'dailyData': data, 'form': form})
 
 # yzy
 def daily(request):
@@ -62,12 +61,10 @@ def daily(request):
     account_overview = [{'account_type':acc.account_type,'net_profit':acc.net_profit,'unit':acc.unit,'date':acc.date,'balance':acc.balance} for acc in account]
     return JsonResponse({'list':account_overview,'pageTotal':len(account_overview)})
 
-
-
-# Monthly Journal에 대한 View
+# Monthly Journal的 View
 def monthly(request):
-    data = serializers.serialize ("json", Monthly.objects.all())
-    # 정보 제출(Submit) 시, Monthly(month, revenue, cost, net_profit, balance, date, recorder)의 데이터베이스 저장
+    data = Monthly.objects.all()
+    # 输入信息后(Submit) , Monthly(month, revenue, cost, net_profit, balance, date, recorder)储存在DB
     if request.method == 'POST':
         form = MonthlyFrom(request.POST)
         if form.is_valid():
@@ -75,7 +72,7 @@ def monthly(request):
             revenue = (float)(form['revenue'].value())
             cost = (float)(form['cost'].value())
             net_profit = revenue - cost
-            # Balance 계산
+            # Balance 计算
             if(data.count() < 1):
                 balance = 0.0
             else:
@@ -84,18 +81,19 @@ def monthly(request):
             Monthly(net_profit = net_profit, month = date, balance = balance + net_profit, date = date, revenue = revenue, cost = cost, recorder = "1").save()
     else:
         form = MonthlyFrom()
-    return render(request, 'monthly.html', {'monthlyData':json.dumps(data), 'form':form})
+    return render(request, 'monthly.html', {'monthlyData':data, 'form':form})
 
-# Monthly Analysis에 대한 View
+
+# Monthly Analysis的 View
 def profitAndLoss(request):
-    # html에서 사용할 수 있는 데이터 생성 및 초기화
+    #生成并初始化能在 html使用的数据
     data = list(range(12))
     for i in range(12):
         data[i] = {'month' : i + 1, 'revenue' : 0, 'cost' : 0, 'net_profit': 0, 'balance': 0, 'result': 'none'}
     # Monthly에 있는 데이터베이스 사용
     monthlyData  = Monthly.objects
     dateData = monthlyData.values('date__month') 
-    # 각 월에 대한 revenue, cost, net_profit에 대하서 종합 계산
+    # 对各月 revenue, cost, net_profit进行综合计算
     for i in range(dateData.count()):
         month = dateData[i]['date__month']
         for j in range(12):
@@ -117,4 +115,4 @@ def profitAndLoss(request):
             data[i]['result'] = 'loss'
         else:
             data[i]['result'] = 'none'
-    return render(request, 'profitAndLoss.html', {'data': json.dumps(data)})
+    return render(request, 'profitAndLoss.html', {'data': data})
