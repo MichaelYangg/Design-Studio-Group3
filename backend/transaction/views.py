@@ -57,7 +57,7 @@ def delete_transaction(request):
     print(request.body)
     print(str(request.body,encoding='utf-8'))
     data = eval(str(request.body,encoding='utf-8'))
-    transaction_id = data['transaction_id']
+    transaction_id = data['list'][0]['transaction_id']
     try:
         tran = Transaction.objects.get(transaction_id=transaction_id)
         tran.delete()
