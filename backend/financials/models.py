@@ -7,7 +7,7 @@ class Transaction(models.Model):  # 创建“交易”数据表，包括收银0�
     transaction_id = models.BigIntegerField(primary_key=True)
     volume = models.FloatField(default=0.0)
     unit = models.CharField(max_length=10)
-    time_date = models.DateTimeField(default=datetime.date.today())
+    time_date = models.DateTimeField(default=datetime.datetime.now())
     resource = models.IntegerField(default=0)
     category = models.CharField(max_length=10)
     explanation = models.CharField(max_length=100)
