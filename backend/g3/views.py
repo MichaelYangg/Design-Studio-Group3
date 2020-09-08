@@ -76,8 +76,8 @@ def stock_out(request):
         current_id = current_tran.transaction_id
         new_id = current_id + 1
         volume = float(info['amount'])
-        unit = data['unit']
-        category = data['mName']
+        unit = info['unit']
+        category = info['mName']
         try:
             Transaction.objects.create(transaction_id=new_id,volume=-volume,unit=unit,resource=3,category=category,explanation='无')
         except:
@@ -87,12 +87,16 @@ def stock_out(request):
 def inventory(request):
     xmlinfo = request.POST
     data = xmltodict.parse(xmlinfo)
-    current_tran = Transaction.objects.order_by('-transaction_id')[0]
-    current_id = current_tran.transaction_id
-    new_id = current_id + 1
-    try:
-        Transaction.objects.create(transaction_id=new_id,volume=-float(data['amount']),unit=data['unit'],resource=5,category=data['mName'],explanation='无')
-        result = 'success'
-    except:
-        result = 'fail'
+    result = 'success'
+    for info in data:
+        current_tran = Transaction.objects.order_by('-transaction_id')[0]
+        current_id = current_tran.transaction_id
+        new_id = current_id + 1
+        volume = float(info['stock'])
+        category = info['mName']
+        unit = info['unit']
+        try:
+            Transaction.objects.create(transaction_id=new_id,volume=-volume,unit=unit,resource=5,category=category,explanation='无')
+        except:
+            result = 'fail'
     return JsonResponse({'result':result})
