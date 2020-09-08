@@ -55,26 +55,34 @@ def daily(request):
     return JsonResponse({'list':account_overview,'pageTotal':len(account_overview)},safe=False,json_dumps_params={'ensure_ascii':False})
 
 # Monthly Journal的 View
+#def monthly(request):
+#   data = Monthly.objects.all()
+#    # 输入信息后(Submit) , Monthly(month, revenue, cost, net_profit, balance, date, recorder)储存在DB
+#    if request.method == 'POST':
+#       form = MonthlyFrom(request.POST)
+#        if form.is_valid():
+#            date = form['date'].value()
+#            revenue = (float)(form['revenue'].value())
+#            cost = (float)(form['cost'].value())
+#            net_profit = revenue - cost
+#            # Balance 计算
+#            if(data.count() < 1):
+#                balance = 0.0
+#            else:
+#                balance = Monthly.objects.aggregate(Sum('net_profit'))['net_profit__sum']
+#                balance = (float)(balance)
+#            Monthly(net_profit = net_profit, month = date, balance = balance + net_profit, date = date, revenue = revenue, cost = cost, recorder = "1").save()
+#    else:
+#        form = MonthlyFrom()
+#    return render(request, 'monthly.html', {'monthlyData':data, 'form':form})
+
 def monthly(request):
-    data = Monthly.objects.all()
-    # 输入信息后(Submit) , Monthly(month, revenue, cost, net_profit, balance, date, recorder)储存在DB
-    if request.method == 'POST':
-        form = MonthlyFrom(request.POST)
-        if form.is_valid():
-            date = form['date'].value()
-            revenue = (float)(form['revenue'].value())
-            cost = (float)(form['cost'].value())
-            net_profit = revenue - cost
-            # Balance 计算
-            if(data.count() < 1):
-                balance = 0.0
-            else:
-                balance = Monthly.objects.aggregate(Sum('net_profit'))['net_profit__sum']
-                balance = (float)(balance)
-            Monthly(net_profit = net_profit, month = date, balance = balance + net_profit, date = date, revenue = revenue, cost = cost, recorder = "1").save()
-    else:
-        form = MonthlyFrom()
-    return render(request, 'monthly.html', {'monthlyData':data, 'form':form})
+    account = Monthly.objects.order_by('-date')
+    # Monthly.objects.create(month='2020-08',revenue='10000',cost='2000',net_profit='8000',balance='18000',date=datetime.datetime.today())
+    print(account)
+    account_overview = [{'month':acc.month,'revenue':acc.revenue,'cost':acc.cost,'net_profit':acc.net_profit,'balance':acc.balance,'date':acc.date} for acc in account]
+    return JsonResponse({'list':account_overview,'pageTotal':len(account_overview)},safe=False,json_dumps_params={'ensure_ascii':False})
+
 
 
 # Monthly Analysis的 View
