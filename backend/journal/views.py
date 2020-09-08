@@ -48,16 +48,9 @@ import datetime
 
 # yzy
 def daily(request):
-    # account = Daily.objects.order_by('-date')
-    account = Daily.objects.all()
+    account = Daily.objects.order_by('-date')
+    # Daily.objects.create(account_type='白菜',net_profit='30',unit='吨',balance='20',date=datetime.datetime.today())
     print(account)
-    Daily.objects.create(account_type='白菜',net_profit='30',unit='吨',balance='20',date=datetime.datetime.today())
-    account = Daily.objects.all()
-    print(account)
-    # account_overview = []
-    # for acc in account:
-    #     ac = {'account_type':acc.account_type,'net_profit':acc.net_profit,'unit':acc.unit,'date':acc.date,'balance':acc.balance}
-    #     account_overview.append(ac)
     account_overview = [{'account_type':acc.account_type,'net_profit':acc.net_profit,'unit':acc.unit,'date':acc.date,'balance':acc.balance} for acc in account]
     return JsonResponse({'list':account_overview,'pageTotal':len(account_overview)})
 
