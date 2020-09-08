@@ -51,7 +51,7 @@ def daily(request):
     account = Daily.objects.order_by('-date')
     # Daily.objects.create(account_type='白菜',net_profit='30',unit='吨',balance='20',date=datetime.datetime.today())
     print(account)
-    account_overview = [{'account_type':acc.account_type,'net_profit':acc.net_profit,'unit':acc.unit,'date':acc.date,'balance':acc.balance} for acc in account]
+    account_overview = [{'account_type':acc.account_type,'date':acc.date,'net_profit':acc.net_profit,'unit':acc.unit,'balance':acc.balance} for acc in account]
     return JsonResponse({'list':account_overview,'pageTotal':len(account_overview)},safe=False,json_dumps_params={'ensure_ascii':False})
 
 # Monthly Journal的 View
