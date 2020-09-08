@@ -43,15 +43,17 @@ def add_transaction(request):
     try:
         tran = Transaction.objects.get(transaction_id=transaction_id)
         result = 'fail'
+        raise Http404("Transaction already exists")
     except:
         try:
             Transaction.objects.create(transaction_id=transaction_id,volume=tran_info['volume'], unit=tran_info['unit'], 
                         resource=tran_info['resource'],category=tran_info['category'], explanation=tran_info['explanation'])
             # time_date=tran_info['time_date'],
             result = 'success'
+            return JsonResponse({'result':result})
         except:
             result = 'fail'
-    return JsonResponse({'result':result})
+            return JsonResponse({'result':result})
 
 def delete_transaction(request):
     print(request.body)
