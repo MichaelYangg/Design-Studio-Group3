@@ -77,7 +77,7 @@ def change_transaction(request):
     else:
         Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(volume=tran_info['volume'])
         Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(unit=tran_info['unit'])
-        Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(time_date=tran_info['time_date'])
+        # Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(time_date=tran_info['time_date'])
         Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(resource=tran_info['resource'])
         Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(category=tran_info['category'])
         Transaction.objects.filter(transaction_id = tran_info['transaction_id']).update(explanation=tran_info['explanation'])
