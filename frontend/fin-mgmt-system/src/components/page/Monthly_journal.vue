@@ -11,11 +11,13 @@
                 <el-input v-model="monthlyquery.month" placeholder="输入月度（YYYY-MM）" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
+       
+
             <el-table
                 :data="tableData"
                 border
                 class="table"
-                ref="multipleTable"
+                ref="monthlyJournalFormRef"
                 header-cell-class-name="table-header"
                 @selection-change="handleSelectionChange"
             >
@@ -25,12 +27,9 @@
                 <template slot-scope="scope">￥{{scope.row.revenue}}</template></el-table-column>
                 <el-table-column prop="cost" label="成本" align=center>
                   <template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
-                <el-table-column prop="net_profit" label="利润" align=center>
-                  <template slot-scope="scope">￥{{scope.row.net_profit}}</template></el-table-column>
-                <el-table-column prop="balance" label="结余" align=center>
-                  <template slot-scope="scope">￥{{scope.row.balance}}</template></el-table-column>
+                <el-table-column prop="net_profit" label="利润" align=center></el-table-column>
+                <el-table-column prop="balance" label="结余" align=center></el-table-column>
                 <el-table-column prop="date" label="记录日期" align=center></el-table-column>
-                <el-table-column prop="recorder" label="记录人工作编号" align=center></el-table-column>
             </el-table>
             <div class="pagination">
                 <el-pagination
@@ -49,11 +48,16 @@
 <script>
 import { fetchMonthlyData } from '../../api/monthlyjournal';
 export default {
-    name: 'monthlyjournal',
+    name: 'Monthlyjournal',
     data() {
         return {
             monthlyquery: {
                 month: '',
+                revenue:'',
+                cost:'',
+                net_profit:'',
+                balance:'',
+                date:'',
                 pageIndex: 1,
                 pageSize: 10
             },
@@ -73,12 +77,12 @@ export default {
             fetchMonthlyData(this.monthlyquery).then(res => {
                 console.log(res);
                 this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
+                this.pageTotal = res.pageTotal;
             });
         },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.monthlyquery, 'month', );
+            this.$set(this.monthlyquery, 'month');
             this.getData();
         },
         // 分页导航

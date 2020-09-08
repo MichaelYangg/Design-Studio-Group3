@@ -11,7 +11,7 @@
             <div class="handle-box">
                 <el-input v-model="query.transaction_id" placeholder="输入交易编号" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-          <el-button type="primary" @click="dialogVisible = true">添加交易信息</el-button>
+          <el-button type="primary" @click="dialogVisible=true">添加交易信息</el-button>
             </div>
             <el-table
                 :data="tableData"
@@ -19,16 +19,12 @@
                 class="table"
                 ref="multipleTable"
                 header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
             >
                 <el-table-column type="index" align=center></el-table-column>
                 <el-table-column prop="transaction_id" label="交易编号" align="center"></el-table-column>
                 <el-table-column prop="volume" label="交易额" align=center></el-table-column>
                 <el-table-column prop="unit" label="交易单位" align=center></el-table-column>
-                <el-table-column prop="time_date" label="交易日期时间" align=center>
-
-                  
-                </el-table-column>
+                <el-table-column prop="date_time" label="交易日期时间" :formatter="dateTimeFormat" align=center></el-table-column>
                 <el-table-column prop="resource" label="交易类型" align=center></el-table-column>
                 <el-table-column prop="category" label="交易物品类别" align=center></el-table-column>
                 <el-table-column prop="explanation" label="注释" align=center></el-table-column>
@@ -37,8 +33,8 @@
                         <el-button
                             type="text"
                             icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
+                            @click="handleEdit(scope.$index, scope.row)">
+                        编辑</el-button>
                         <el-button
                             type="text"
                             icon="el-icon-delete"
@@ -62,10 +58,9 @@
 
  <!-- 添加交易信息对话框 -->
     <el-dialog
-      title="添加交易信息"
+      title="addOperation"
       :visible.sync="dialogVisible"
       width="80%"
-      @close="addDialogClosed"
     >
       <el-form
         :model="addTransactionForm"
@@ -75,24 +70,24 @@
         class="demo-ruleForm"
       >
         <el-form-item label="交易编号" prop="transaction_id">
-          <el-input v-model="addTransactionForm.transaction_id"></el-input>
+          <el-input v-model="addTransactionForm.transaction_id" placeholder="请输入交易编号"></el-input>
         </el-form-item>
         <el-form-item label="交易额" prop="volume">
-          <el-input v-model="addTransactionForm.volume"></el-input>
+          <el-input v-model="addTransactionForm.volume" placeholder="请输入交易额"></el-input>
         </el-form-item>
         <el-form-item label="交易单位" prop="unit">
-          <el-input v-model="addTransactionForm.unit"></el-input>
+          <el-input v-model="addTransactionForm.unit" placeholder="请输入交易单位"></el-input>
         </el-form-item>
-        <el-form-item label="交易日期时间" prop="time_date">
-          <el-input v-model="addTransactionForm.time_date"></el-input>
+        <el-form-item label="交易日期时间" prop="date_time" >
+          <el-input v-model="addTransactionForm.date_time" placeholder="YYYY-MM-DD HH:mm:ss"></el-input>
         </el-form-item>
         <el-form-item label="交易类型" prop="resource">
-          <el-input v-model="addTransactionForm.resource"></el-input>
+          <el-input v-model="addTransactionForm.resource" placeholder="0：收银 1：储值 2：入库 3：出库 4：加工费用 5：盘亏盘盈 6：外卖 7：其他"></el-input>
         </el-form-item>
         <el-form-item label="交易物品类别" prop="category">
-          <el-input v-model="addTransactionForm.category"></el-input>
+          <el-input v-model="addTransactionForm.category" placeholder="请输入交易物品类别"></el-input>
         </el-form-item>
-        <el-form-item label="注释" prop="explanation">
+        <el-form-item label="注释" prop="explanation" placeholder="请输入注释">
           <el-input v-model="addTransactionForm.explanation"></el-input>
         </el-form-item>
       </el-form>
@@ -105,28 +100,28 @@
 
 
         <!-- 修改交易信息弹出框 -->
-        <el-dialog title="编辑交易信息" :visible.sync="editVisible" width="30%">
-            <el-form ref="form" :model="form" label-width="70px">
+        <el-dialog title="editOperation" :visible.sync="editVisible" width="30%">
+            <el-form ref="editTransactionFormRef" :model="editTransactionForm" label-width="70px">
                 <el-form-item label="交易编号">
-                    <el-input v-model="form.transaction_id" disabled></el-input>
+                    <el-input v-model="editTransactionForm.transaction_id" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="交易额">
-                    <el-input v-model="form.volume"></el-input>
+                    <el-input v-model="editTransactionForm.volume"></el-input>
                 </el-form-item>
                  <el-form-item label="交易单位">
-                    <el-input v-model="form.unit"></el-input>
+                    <el-input v-model="editTransactionForm.unit"></el-input>
                 </el-form-item>
                  <el-form-item label="交易日期时间">
-                    <el-input v-model="form.time_date"></el-input>
+                    <el-input v-model="editTransactionForm.date_time"></el-input>
                 </el-form-item>
                  <el-form-item label="交易类型">
-                    <el-input v-model="form.resource"></el-input>
+                    <el-input v-model="editTransactionForm.resource"></el-input>
                 </el-form-item>
                  <el-form-item label="交易物品类别">
-                    <el-input v-model="form.category"></el-input>
+                    <el-input v-model="editTransactionForm.category"></el-input>
                 </el-form-item>
                  <el-form-item label="注释">
-                    <el-input v-model="form.explanation"></el-input>
+                    <el-input v-model="editTransactionForm.explanation"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -134,35 +129,53 @@
                 <el-button type="primary" @click="saveEdit">确 定</el-button>
             </span>
         </el-dialog>
+
+        <!-- 删除交易信息弹出框 -->
+        <el-dialog title="deleteOperation" :visible.sync="deleteVisible" width="30%">
+         <span>确定要删除吗？</span>
+         <span slot="footer" class="dialog-footer">
+           <el-button @click="deleteVisible=false">取 消</el-button>
+           <el-button type="warning" @click="deleteTransaction()">删 除</el-button>
+         </span>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
-import { fetchData } from '../../api/transactions';
+import { fetchData, addList, editList, deleteList, queryTransaction } from '../../api/transactions';
+import moment from 'moment'
 export default {
-    name: 'transaction',
+    name: 'Transaction',
     data() {
         return {
             query: {
                 transaction_id: '',
+                volume:'',
+                unit:'',
+                date_time:'',
+                resource:'',
+                category:'',
+                explanation:'',
                 pageIndex: 1,
                 pageSize: 10
             },
             tableData: [],
             dialogVisible: false,
             editVisible: false,
+            deleteVisible: false,
             pageTotal: 0,
             form: {},
             idx: -1,
             id: -1,
     addTransactionForm: {
-        transaction_id:"",
-        volume:"",
-        unit:"",
-        time_date:"",
-        resource:"",
-        category:"",
-        explanation:""
+        transaction_id:'',
+        volume:'',
+        unit:'',
+        date_time:'',
+        resource:'',
+        category:'',
+        explanation:''
       },
       addTransactionFormRules: {
         transaction_id: [
@@ -185,9 +198,9 @@ export default {
             require: true, trigger: "blur"
           }
         ],
-        time_date: [
-          { required: true, message: "请输入交易日期时间", trigger: "blur" },
-          { require: true, trigger: "blur" }
+        date_time: [
+          { required: true, message: "请输入交易日期时间 (ex. 2020-09-04 00:00:00)", trigger: "blur" },
+          { require: true, pattern: '', trigger: "blur" }
         ],
         resource: [
           { required: true, message: "0：收银 1：储值 2：入库 3：出库 4：加工费用 5：盘亏盘盈 6：外卖 7：其他", trigger: "blur" },
@@ -198,8 +211,19 @@ export default {
           { require: true, trigger: "blur"}
         ]
       },
-      editTransactionForm: {},
+      editTransactionForm: {
+        transaction_id:'',
+        volume:'',
+        unit:'',
+        date_time:'',
+        resource:'',
+        category:'',
+        explanation:''
+      },
       editTransactionFormRules: {
+        transaction_id: [
+
+        ],
         volume: [
           { required: true, message: "请输入交易额", trigger: "blur" },
           { require: true, trigger: "blur" }
@@ -208,7 +232,7 @@ export default {
           { required: true, message: "请输入交易单位", trigger: "blur" },
           { require: true, trigger: "blur" }
         ],
-        time_date: [
+        date_time: [
           { required: true, message: "请输入交易日期时间", trigger: "blur"},
           { require: true, trigger: "blur"}
         ],
@@ -227,61 +251,159 @@ export default {
         this.getData();
     },
     methods: {
-        // 获取数据
         getData() {
             fetchData(this.query).then(res => {
-                console.log(res);
                 this.tableData = res.list;
-                this.pageTotal = res.pageTotal || 50;
+                this.pageTotal = res.pageTotal;
             });
         },
         // 触发搜索按钮
         handleSearch() {
-            this.$set(this.query, 'transaction_id', );
-            this.getData();
+            this.$set(this.query, 'transaction_id');
+            queryTransaction(this.query.transaction_id).then(res => {
+                var list = [];
+                list.append(res);
+                console.log(list);
+                this.tableData = list;
+                this.pageTotal = 1;
+            })    
+            
+            // this.getData();
         },
         // 新增操作
          addTransaction() {
-        this.$refs.addTransactionFormRef.validate(async valid => {
-        if (!valid) return;
-        const { data } = await this.$http.post("users", this.addTransactionForm);
-        if (data.meta.status !== 201) {
-          this.$message.error("新增失败");
-        }
-        this.$message.success("新增成功");
-        this.dialogVisible = false;
-        this.getTransactionList();
-        });
-        },
+        // // 二次进行用户数据的验证
+          console.log("here in add transaction")
+        //    this.$refs.addTransactionForm.validate(valid => {
+        //      if (valid) {
+               //发起新增交易信息请求
+               addList(this.addTransactionForm)
+               .then(res => {
+                 if (res.data.meta.status === 201) {
+                   this.$message({
+                     type: 'success',
+                     message: '新增交易信息成功'
+                   })
+                   //数据刷新
+                   this.dialogVisible = false
+                   //表单元素的数据重置
+                   this.$refs.addTransactionForm.resetFields()
+                   this.init()
+                 } else {
+                   this.$message({
+                     type: 'error',
+                     message: '新增交易信息失败'
+                   })
+                 }
+               })
+                  .catch( () => {
+                    this.$message({
+                      type: 'error',
+                      message: '新增交易信息失败'
+                    })
+                  })
+            //  } else {
+            //    //中止此次请求
+            //    console.log("here")
+            //    return false
+            //  }
+          //  })
+    },
+
         // 删除操作
         handleDelete(index, row) {
             // 二次确认删除
-            this.$confirm('确定要删除吗？', '提示', {
+            this.$confirm('确定要删除该信息吗？', '提示', {
+                confirmButtonText: "确 定",
+                cancelButtonText: "取 消",
                 type: 'warning'
             })
-                .then(() => {
-                    this.$message.success('删除成功');
-                    this.tableData.splice(index, 1);
+            .then(() => {
+           //发起删除请求
+            deleteList(this.tableData)
+            .then(res => {
+              if(res.data.meta.status === 200) {
+                this.$message({
+                  type: 'success',
+                  message: '删除成功'
                 })
-                .catch(() => {});
+                this.tableData.splice(index, 1);
+              }
+            })
+            .catch( () => {
+              this.$message({
+                type: 'error',
+                message: '删除失败'
+              })
+            })
+          }).catch( () => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
         },
         // 编辑操作
-        handleEdit(index, row) {
+        handleEdit (index, row) {
             this.idx = index;
-            this.form = row;
+            this.editTransactionForm = row;
             this.editVisible = true;
+        },
+        //编辑交易信息
+        editTransaction() {
+          this.$refs.editTransactionForm.validate(valid => {
+            if(valid) {
+              editList(this.editTransactionForm).then(res => {
+                console.log(res)
+                if(res.data.meta.status === 200) {
+                  this.$message({
+                    type: 'success',
+                    message: '修改交易信息成功'
+                  })
+                  //数据刷新
+                  this.editVisible=false
+                  // 表单元素的数据重置
+                  this.$refs.editTransactionForm.resetFields()
+                  this.init()
+                } else {
+                  this.$message({
+                    type: 'error',
+                    message: '修改交易信息失败'
+                  })
+                }
+              }).catch( () => {
+                console.log('err')
+              })
+            } else {
+              return false
+            }
+          })
         },
         // 保存编辑
         saveEdit() {
             this.editVisible = false;
             this.$message.success('修改成功');
-            this.$set(this.tableData, this.idx, this.form);
+            this.$set(this.tableData, this.form);
         },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'pageIndex', val);
             this.getData();
+        },
+        // 交易信息表中的交易日期时间格式化
+        dateTimeFormat(row, column) {
+          let date = row[column.property]
+          if (date == undefined) {
+            return ''
+          }
+          return moment(date).format("YYYY-MM-DD HH:mm:ss")
         }
+        // dateStrFormat(strTime) {
+        //   if(strTime == undefined) {
+        //     return ''
+        //   }
+        //   return moment(strTime).format("YYYY-MM-DD HH:mm:ss")
+        // }      
     }
 };
 </script>
