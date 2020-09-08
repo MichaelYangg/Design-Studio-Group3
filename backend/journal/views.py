@@ -9,41 +9,58 @@ from django.core import serializers
 from journal.models import Daily, Monthly
 from .forms import DailyFrom, MonthlyFrom
 from . import views
+import datetime
 
 # Daily Journal에 대한 View
-def daily(request):
-    data = serializers.serialize ("json", Daily.objects.all())
-    # 정보 제출(Submit) 시, Daily(account_type, net_profit, unit, date, balance)의 데이터베이스 저장
-    if request.method == 'POST':
-        form = DailyFrom(request.POST)
-        if form.is_valid():
-            check = form['account_type'].value()
-            unit = form['unit'].value()
-            date = form['date'].value()
-            net_profit = (float)(form['net_profit'].value())
-            # Balance 계산(Profit Balance와 Loss Balance를 따로 구해서, 두 값의 '차이(-)'를 구하면 이전 값까지의 balance를 구함)
-            if(data.count() < 1):
-                balance = 0.0
-            else:
-                balance_pTotal = Daily.objects.filter(account_type='P').aggregate(Sum('net_profit'))['net_profit__sum']
-                balance_mTotal = Daily.objects.filter(account_type='L').aggregate(Sum('net_profit'))['net_profit__sum']
-                if(balance_pTotal == None):
-                    balance_pTotal = 0
-                elif(balance_mTotal == None):
-                    balance_mTotal = 0
-                balance = balance_pTotal - balance_mTotal
-            # Account Type가 'profit(P)' or 'loss(L)'에 따라 DB에 구분 저장
-            if(check == 'P'):
-                Daily(account_type = check, net_profit = net_profit, unit = unit, date = date, balance = balance + net_profit).save()
-            elif(check == 'L'):
-                Daily(account_type = check, net_profit = net_profit, unit = unit, date = date, balance = balance - net_profit).save()
-            else:
-                EOFError
-        return redirect('/daily')
-    else:
-        form = DailyFrom()
+# def daily(request):
+#     data = serializers.serialize ("json", Daily.objects.all())
+#     # 정보 제출(Submit) 시, Daily(account_type, net_profit, unit, date, balance)의 데이터베이스 저장
+#     if request.method == 'POST':
+#         form = DailyFrom(request.POST)
+#         if form.is_valid():
+#             check = form['account_type'].value()
+#             unit = form['unit'].value()
+#             date = form['date'].value()
+#             net_profit = (float)(form['net_profit'].value())
+#             # Balance 계산(Profit Balance와 Loss Balance를 따로 구해서, 두 값의 '차이(-)'를 구하면 이전 값까지의 balance를 구함)
+#             if(data.count() < 1):
+#                 balance = 0.0
+#             else:
+#                 balance_pTotal = Daily.objects.filter(account_type='P').aggregate(Sum('net_profit'))['net_profit__sum']
+#                 balance_mTotal = Daily.objects.filter(account_type='L').aggregate(Sum('net_profit'))['net_profit__sum']
+#                 if(balance_pTotal == None):
+#                     balance_pTotal = 0
+#                 elif(balance_mTotal == None):
+#                     balance_mTotal = 0
+#                 balance = balance_pTotal - balance_mTotal
+#             # Account Type가 'profit(P)' or 'loss(L)'에 따라 DB에 구분 저장
+#             if(check == 'P'):
+#                 Daily(account_type = check, net_profit = net_profit, unit = unit, date = date, balance = balance + net_profit).save()
+#             elif(check == 'L'):
+#                 Daily(account_type = check, net_profit = net_profit, unit = unit, date = date, balance = balance - net_profit).save()
+#             else:
+#                 EOFError
+#         return redirect('/daily')
+#     else:
+#         form = DailyFrom()
     
-    return render(request, 'daily.html', {'dailyData': json.dumps(data),'form':form})
+#     return render(request, 'daily.html', {'dailyData': json.dumps(data),'form':form})
+
+
+# yzy
+def daily(request):
+    # account = Daily.objects.order_by('-date')
+    account = Daily.objects.all()
+    print(account)
+    Daily.objects.create(account_type='白菜',net_profit='30',unit='吨',balance='20',date=datetime.datetime.today())
+    account = Daily.objects.all()
+    print(account)
+    # account_overview = []
+    # for acc in account:
+    #     ac = {'account_type':acc.account_type,'net_profit':acc.net_profit,'unit':acc.unit,'date':acc.date,'balance':acc.balance}
+    #     account_overview.append(ac)
+    account_overview = [{'account_type':acc.account_type,'net_profit':acc.net_profit,'unit':acc.unit,'date':acc.date,'balance':acc.balance} for acc in account]
+    return JsonResponse({'list':account_overview,'pageTotal':len(account_overview)})
 
 
 
