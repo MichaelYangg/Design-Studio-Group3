@@ -32,7 +32,9 @@ def detail(request, transaction_id):
         return JsonResponse(tran_info,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def add_transaction(request):
+    print(request.body)
     data = eval(str(request.body,encoding='utf-8'))
+    print(data)
     assert 'list' in data
     tran_info = data['list'][0]
     print(tran_info)
