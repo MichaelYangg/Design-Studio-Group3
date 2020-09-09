@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="search" placeholder="输入交易编号" clearable @clear="handleSearch" class="handle-input mr10"></el-input>
+                <el-input v-model="query.transaction_id" placeholder="输入交易编号" clearable @clear="handleSearch" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
           <el-button type="primary" @click="dialogVisible=true">添加交易信息</el-button>
             </div>
@@ -416,13 +416,17 @@ export default {
             this.getData();
         },
         // 交易信息表中的交易日期时间格式化
-        dateTimeFormat(row, column) {
-          let date = row[column.property]
-          if (date == undefined) {
-            return ''
-          }
-          return moment(date).format("YYYY-MM-DD HH:mm:ss")
-        }
+        // dateTimeFormat(date_time) {
+        //   // let time = this.$moment.utc(date_time).format('YYYY-MM-DD HH:mm:ss');
+        //   // return time
+        //   // let date = row[column.property]
+        //   // if (date == undefined) {
+        //   //   return ''
+        //   // }
+        //   // return moment(date).format("YYYY-MM-DD HH:mm:ss")
+        // }
+
+
         // dateStrFormat(strTime) {
         //   if(strTime == undefined) {
         //     return ''
