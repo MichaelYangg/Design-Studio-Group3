@@ -32,11 +32,11 @@ export default {
         return {
             param: {
                 username: 'admin',
-                password: '123123',
+                password: 'sem123',
             },
             rules: {
                 username: [{ required: true, message: '请输入用户名', pattern: /^admin$/, trigger: 'blur' }],
-                password: [{ required: true, pattern: /^123123$/, message: '请输入密码', trigger: 'blur' }],
+                password: [{ required: true, pattern: /^sem123$/, message: '请输入密码', trigger: 'blur' }],
             },
         };
     },
