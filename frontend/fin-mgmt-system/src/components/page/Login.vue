@@ -65,7 +65,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-color:grey;
+    background-color:#242f42;
     background-size: 100%;
 }
 .ms-title {
