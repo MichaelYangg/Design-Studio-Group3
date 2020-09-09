@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 # Create your models here.
 class Daily(models.Model):
@@ -38,6 +39,6 @@ class Monthly(models.Model):
     cost = models.DecimalField(max_digits=8, decimal_places=2)
     net_profit = models.DecimalField(max_digits=8, decimal_places=2)
     balance = models.FloatField()
-    date = models.DateField(auto_now=False, auto_now_add=False)
+    date = models.DateField(auto_now=False, auto_now_add=False,default=datetime.datetime.today())
     recorder = models.BigIntegerField()
 
