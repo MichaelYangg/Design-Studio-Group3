@@ -24,7 +24,7 @@
                 <el-table-column prop="transaction_id" label="交易编号" align="center"></el-table-column>
                 <el-table-column prop="volume" label="交易额" align=center></el-table-column>
                 <el-table-column prop="unit" label="交易单位" align=center></el-table-column>
-                <el-table-column prop="date_time" label="交易日期时间" :formatter="dateTimeFormat" align=center></el-table-column>
+                <el-table-column prop="date_time" label="交易日期时间" :formatter="dateTimeFormat" width=100% align=center></el-table-column>
                 <el-table-column prop="resource" label="交易类型" align=center></el-table-column>
                 <el-table-column prop="category" label="交易物品类别" align=center></el-table-column>
                 <el-table-column prop="explanation" label="注释" align=center></el-table-column>
@@ -112,7 +112,8 @@
                     <el-input v-model="editTransactionForm.unit"></el-input>
                 </el-form-item>
                  <el-form-item label="交易日期时间">
-                    <el-input v-model="editTransactionForm.date_time"></el-input>
+                    <el-input v-model="editTransactionForm.date_time">
+                    </el-input>
                 </el-form-item>
                  <el-form-item label="交易类型">
                     <el-input v-model="editTransactionForm.resource"></el-input>
@@ -162,7 +163,6 @@ export default {
             },
             search:'',
             tableData: [],
-            // searchData: [],
             dialogVisible: false,
             editVisible: false,
             deleteVisible: false,
@@ -170,9 +170,6 @@ export default {
             form: {},
             idx: -1,
             id: -1,
-    // filters: {
-    //   transaction_id:''
-    // },
     addTransactionForm: {
         transaction_id:'',
         volume:'',
@@ -255,29 +252,19 @@ export default {
     created() {
         this.getData();
     },
-    // computed: {
-    //   tableData(){
-    //   if(this.search) {
-    //     return.this.tableData.filter(item =>
-    //     Object.keys(item).some(key =>
-    //     String(item[key]).toLowerCase().indexOf(this.search) > -1
-    //     )
-    //     );
-    //   } else return this.tableData;
-    // },
+
     methods: {
+        // 从后端数据库获取交易信息
         getData() {
             fetchData(this.query).then(res => {
                 this.tableData = res.list;
                 this.pageTotal = res.pageTotal;
             });
         },
-
         // 触发搜索按钮
         handleSearch () {
               this.$set(this.query, 'pageIndex', 1);
               this.getData();
-        //     // this.$set(this.query, 'transaction_id');
              queryTransaction(this.query.transaction_id).then(res => {
                  var list = [];
                  list.append(res);
@@ -291,46 +278,31 @@ export default {
         // 新增操作
          addTransaction() {
         // // 二次进行用户数据的验证
-          console.log("here in add transaction")
-        //    this.$refs.addTransactionFormRef.validate(valid => {
-        //      if (valid) {
+           this.$refs.addTransactionFormRef.validate(valid => {
+             if (valid) {
                //发起新增交易信息请求
                addList(this.addTransactionForm)
                .then(res => {
-                 if (res.data.meta.status === 201) {
-                   this.$message.success('新增交易信息成功')
-                  //  ({
-                  //    type: 'success',
-                  //    message: '新增交易信息成功'
-                  //  })
+                 if (res.data.meta.status === 200) {
+                   this.$message.error('新增交易信息失败')
                    //数据刷新
-                   this.dialogVisible = false
+
                    //表单元素的数据重置
                    this.$refs.addTransactionFormRef.resetFields()
                    this.init()
-                 } else {
-                   this.$message.error('新增交易信息失败')
-                  //  ({
-                  //    type: 'error',
-                  //    message: '新增交易信息失败'
-                  //  })
-                 }
+                 } 
+               })
+               .catch( () => {
+                  this.$message.success('新增交易信息成功');
                })
                   .catch( () => {
                     this.$message.info('已取消新增交易信息')
-                    // ({
-                    //   type: 'error',
-                    //   message: '新增交易信息失败'
-                    // })
-                  })
-            //  } else {
-            //    //中止此次请求
-            //    console.log("here")
-            //    return false
-            //  }
-          //  })
-    },
-
+                    this.dialogVisible = false
+                  });
+              this.$set(this.tableData, this.addTransactionform);
+              }
+           })
+         },
         // 删除操作
         handleDelete(index, row) {
             // 二次确认删除
@@ -344,28 +316,17 @@ export default {
             deleteList(this.tableData)
             .then(res => {
               if(res.data.meta.status === 200) {
-                this.$message.success('删除成功');
-                // ({
-                //   type: 'success',
-                //   message: '删除成功'
-                // })
-                this.tableData.splice(index, 1);
+                this.$message.error('删除失败'); 
               }
+              this.getData();
             })
             .catch( () => {
-              this.$message.error('删除失败');
-              // ({
-              //   type: 'error',
-              //   message: '删除失败'
-              // })
+              this.$message.success('删除成功');
+              this.tableData.splice(index, 1);  
             })
           }).catch( () => {
             this.$message.info('已取消删除');
-            // ({
-            //   type: 'info',
-            //   message: '已取消删除'
-            // })
-          })
+          });
         },
         // 编辑操作
         handleEdit (index, row) {
@@ -373,41 +334,29 @@ export default {
             this.editTransactionForm = row;
             this.editVisible = true;
         },
-        // //编辑交易信息
-        // editTransaction() {
-          
-        // },
         // 编辑交易信息
         saveEdit() {
           this.$refs.editTransactionFormRef.validate(valid => {
             if(valid) {
               editList(this.editTransactionForm).then(res => {
                 console.log(res)
-                if(res.data.meta.status === 200) {
-                  this.$message({
-                    type: 'success',
-                    message: '修改交易信息成功'
-                  })
+                if(res.code === 200) {
+                  this.$message.error('修改交易信息失败')
                   //数据刷新
                   this.editVisible=false
                   // 表单元素的数据重置
                   this.$refs.editTransactionFormRef.resetFields()
                   this.init()
-                } else {
-                  this.$message({
-                    type: 'error',
-                    message: '修改交易信息失败'
-                  })
+                }
+                else
+                 {
+                  this.$message.success('修改交易信息成功')
                 }
               }).catch( () => {
-                console.log('err')
+                this.$message.info('已取消修改交易信息');
               })
-            } else {
-              return false
-            }
-          })
-            // this.editVisible = false;
-            // this.$message.success('修改成功');
+            } 
+          });
             this.$set(this.tableData, this.editTransactionform);
         },
         // 分页导航
@@ -416,23 +365,13 @@ export default {
             this.getData();
         },
         // 交易信息表中的交易日期时间格式化
-        // dateTimeFormat(date_time) {
-        //   // let time = this.$moment.utc(date_time).format('YYYY-MM-DD HH:mm:ss');
-        //   // return time
-        //   // let date = row[column.property]
-        //   // if (date == undefined) {
-        //   //   return ''
-        //   // }
-        //   // return moment(date).format("YYYY-MM-DD HH:mm:ss")
-        // }
-
-
-        // dateStrFormat(strTime) {
-        //   if(strTime == undefined) {
-        //     return ''
-        //   }
-        //   return moment(strTime).format("YYYY-MM-DD HH:mm:ss")
-        // }      
+        dateTimeFormat(row, column) {
+          var date = row[column.property];
+          if(date == undefined){
+            return '';
+          }
+          return moment(date).utcOffset(0).format("YYYY-MM-DD HH:mm:ss")
+        }
     }
 };
 </script>
