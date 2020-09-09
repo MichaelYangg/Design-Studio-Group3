@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.transaction_id" placeholder="输入交易编号" clearable @clear="handleSearch" class="handle-input mr10"></el-input>
+                <el-input v-model="search" placeholder="输入交易编号" clearable @clear="handleSearch" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
           <el-button type="primary" @click="dialogVisible=true">添加交易信息</el-button>
             </div>
@@ -162,7 +162,7 @@ export default {
             },
             search:'',
             tableData: [],
-            searchData: [],
+            // searchData: [],
             dialogVisible: false,
             editVisible: false,
             deleteVisible: false,
@@ -255,6 +255,16 @@ export default {
     created() {
         this.getData();
     },
+    // computed: {
+    //   tableData(){
+    //   if(this.search) {
+    //     return.this.tableData.filter(item =>
+    //     Object.keys(item).some(key =>
+    //     String(item[key]).toLowerCase().indexOf(this.search) > -1
+    //     )
+    //     );
+    //   } else return this.tableData;
+    // },
     methods: {
         getData() {
             fetchData(this.query).then(res => {
@@ -265,18 +275,18 @@ export default {
 
         // 触发搜索按钮
         handleSearch () {
-
-            // this.$set(this.query, 'transaction_id');
-            // queryTransaction(this.query.transaction_id).then(res => {
-            //     var list = [];
-            //     list.append(res);
-            //     console.log(list);
-            //     this.tableData = res.list;
-            //     this.pageTotal = 1;
-            // })
-            // .catch( () => {
-            // })   
-            // this.getData();
+              this.$set(this.query, 'pageIndex', 1);
+              this.getData();
+        //     // this.$set(this.query, 'transaction_id');
+             queryTransaction(this.query.transaction_id).then(res => {
+                 var list = [];
+                 list.append(res);
+                 console.log(list);
+                 this.tableData = res.list;
+                 this.pageTotal = 1;
+             })
+             .catch( () => {
+             })   
         },
         // 新增操作
          addTransaction() {
