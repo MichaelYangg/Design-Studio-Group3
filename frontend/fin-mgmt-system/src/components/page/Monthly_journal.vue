@@ -26,8 +26,8 @@
                 <template slot-scope="scope">￥{{scope.row.revenue}}</template></el-table-column>
                 <el-table-column prop="cost" label="成本" align=center>
                   <template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
-                <el-table-column prop="net_profit" label="利润" align=center></el-table-column>
-                <el-table-column prop="balance" label="结余" align=center></el-table-column>
+                <el-table-column prop="net_profit" label="利润" align=center><template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
+                <el-table-column prop="balance" label="结余" align=center><template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
                 <el-table-column prop="date" label="记录日期" align=center></el-table-column>
             </el-table>
             <div class="pagination">
