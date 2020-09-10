@@ -16,8 +16,12 @@ def overview(request):
     return JsonResponse(overview,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def detail(request, transaction_id):
+    print(request.body)
+    print('*'*20)
+    print(transaction_id)
     try:
         tran = Transaction.objects.get(transaction_id=transaction_id)
+        print('Get 成功')
     except Transaction.DoesNotExist:
         raise Http404("Transaction does not exist")
     else:
@@ -29,6 +33,7 @@ def detail(request, transaction_id):
         tran_info['resource'] = tran.resource
         tran_info['category'] = tran.category
         tran_info['explanation'] = tran.explanation
+        print(tran_info)
         return JsonResponse(tran_info,safe=False,json_dumps_params={'ensure_ascii':False})
 
 def add_transaction(request):
