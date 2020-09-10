@@ -23,7 +23,10 @@ def other_cost(request):
 
 def payment_done_add_credit(request):
     # payment = request.POST
-    payment = {'payment_method': 'cash', 'discount_price': 100, 'time': '2020-09-04 19:00:00', 'telephone': 12345678900}  # 此数值仅用于测试，具体看G1的字段名
+    print(request.body)
+    payment = eval(str(request.body,encoding='utf-8'))
+    print(payment)
+    # payment = {'payment_method': 'cash', 'discount_price': 100, 'time': '2020-09-04 19:00:00', 'telephone': 12345678900}  # 此数值仅用于测试，具体看G1的字段名
     volume = payment['discount_price']
     phone = payment['telephone']
     # 消费增加积分
@@ -31,12 +34,12 @@ def payment_done_add_credit(request):
         target = Member.objects.filter(phone=phone)
     finally:
         original_credit = target.values('credit')[0]['credit']
-        new_credit = original_credit + volume
+        new_credit = int(original_credit) + int(volume)
         Member.objects.filter(phone=phone).update(credit=new_credit)
-        if original_credit < 1000 and new_credit >= 1000:
+        if new_credit <2000 and new_credit >= 1000:
             Member.objects.filter(phone=phone).update(member_class=2)
             Member.objects.filter(phone=phone).update(discount=0.85)
-        if original_credit < 2000 and new_credit >= 2000:
+        if new_credit >= 2000:
             Member.objects.filter(phone=phone).update(member_class=3)
             Member.objects.filter(phone=phone).update(discount=0.75)
     # 记账
@@ -49,6 +52,7 @@ def payment_done_add_credit(request):
         payment_status = 0
     except:
         payment_status = 1
+    print(payment_status)
     return JsonResponse({'payment_status': payment_status})
 
 def stock_in(request):
