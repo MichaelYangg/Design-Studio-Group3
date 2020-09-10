@@ -9,8 +9,8 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.transaction_id" placeholder="输入交易编号" clearable @clear="handleSearch" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                <el-input v-model="query.transaction_id" placeholder="输入交易编号" class="handle-input mr10"></el-input>
+                <el-button type="primary" icon="el-icon-search" @click="handleSearch()">搜索</el-button>
           <el-button type="primary" @click="dialogVisible=true">添加交易信息</el-button>
             </div>
             <el-table
@@ -161,7 +161,6 @@ export default {
                 pageIndex: 1,
                 pageSize: 10
             },
-            search:'',
             tableData: [],
             dialogVisible: false,
             editVisible: false,
@@ -263,6 +262,7 @@ export default {
         },
         // 触发搜索按钮
         handleSearch () {
+          console.log("search");
               this.$set(this.query, 'pageIndex', 1);
               this.getData();
              queryTransaction(this.query.transaction_id).then(res => {
@@ -272,6 +272,7 @@ export default {
                  this.tableData = res.list;
                  this.pageTotal = 1;
              })
+             
              .catch( () => {
              })   
         },
@@ -286,7 +287,7 @@ export default {
                  if (res.data.meta.status === 200) {
                    this.$message.error('新增交易信息失败')
                    //数据刷新
-
+                  this.getData();
                    //表单元素的数据重置
                    this.$refs.addTransactionFormRef.resetFields()
                    this.init()
