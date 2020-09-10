@@ -34,7 +34,7 @@ def detail(request, transaction_id):
         tran_info['category'] = tran.category
         tran_info['explanation'] = tran.explanation
         print(tran_info)
-        return JsonResponse(tran_info,safe=False,json_dumps_params={'ensure_ascii':False})
+        return JsonResponse({"list":[tran_info],'pageTotal':1},safe=False,json_dumps_params={'ensure_ascii':False})
 
 def add_transaction(request):
     print(request.body)
