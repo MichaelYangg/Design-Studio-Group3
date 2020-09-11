@@ -60,8 +60,13 @@ def payment_done_add_credit(request):
     return JsonResponse({'payment_status': payment_status})
 
 def stock_in(request):
-    xmlinfo = request.POST
-    data = xmltodict.parse(xmlinfo)
+    # print(request.body)
+    xmlinfo = request.body
+    # print(xmlinfo)
+    # print(type(xmlinfo))
+    data = xmltodict.parse(xmlinfo)['root']
+    # print(data)
+    # print(type(data))
     current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
@@ -75,8 +80,13 @@ def stock_in(request):
     return JsonResponse({'result':result})
 
 def stock_out(request):
-    xmlinfo = request.POST
-    data = xmltodict.parse(xmlinfo)
+    # print(request.body)
+    xmlinfo = request.body
+    # print(xmlinfo)
+    # print(type(xmlinfo))
+    data = xmltodict.parse(xmlinfo)['root']
+    # print(data)
+    # print(type(data))
     data = data['raw_material']
     result = 'success'
     for info in data:
@@ -93,8 +103,13 @@ def stock_out(request):
     return JsonResponse({'result':result})
 
 def inventory(request):
-    xmlinfo = request.POST
-    data = xmltodict.parse(xmlinfo)
+    # print(request.body)
+    xmlinfo = request.body
+    # print(xmlinfo)
+    # print(type(xmlinfo))
+    data = xmltodict.parse(xmlinfo)['root']
+    # print(data)
+    # print(type(data))
     result = 'success'
     for info in data:
         current_tran = Transaction.objects.order_by('-transaction_id')[0]
