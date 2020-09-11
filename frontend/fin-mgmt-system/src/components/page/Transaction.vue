@@ -102,26 +102,26 @@
         <!-- 修改交易信息弹出框 -->
         <el-dialog title="编辑交易信息" :visible.sync="editVisible" width="30%">
             <el-form ref="editTransactionFormRef" :model="editTransactionForm" :rules="editTransactionFormRules" label-width="80px">
-                <el-form-item label="交易编号">
+                <el-form-item label="交易编号" prop="transaction_id">
                     <el-input v-model="editTransactionForm.transaction_id" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="交易额">
+                <el-form-item label="交易额" prop="volume">
                     <el-input v-model="editTransactionForm.volume"></el-input>
                 </el-form-item>
-                 <el-form-item label="交易单位">
+                 <el-form-item label="交易单位" prop="unit">
                     <el-input v-model="editTransactionForm.unit"></el-input>
                 </el-form-item>
-                 <el-form-item label="交易日期时间">
+                 <el-form-item label="交易日期时间" prop="date_time">
                     <el-input v-model="editTransactionForm.date_time">
                     </el-input>
                 </el-form-item>
-                 <el-form-item label="交易类型">
+                 <el-form-item label="交易类型" prop="resource">
                     <el-input v-model="editTransactionForm.resource"></el-input>
                 </el-form-item>
-                 <el-form-item label="交易物品类别">
+                 <el-form-item label="交易物品类别" prop="category">
                     <el-input v-model="editTransactionForm.category"></el-input>
                 </el-form-item>
-                 <el-form-item label="注释">
+                 <el-form-item label="注释" prop="explanation">
                     <el-input v-model="editTransactionForm.explanation"></el-input>
                 </el-form-item>
             </el-form>
@@ -169,7 +169,6 @@ export default {
             pageTotal: 0,
             form: {},
             idx: -1,
-            id: -1,
     addTransactionForm: {
         transaction_id:'',
         volume:'',
@@ -214,13 +213,13 @@ export default {
         ]
       },
       editTransactionForm: {
-        transaction_id:'',
-        volume:'',
-        unit:'',
-        date_time:'',
-        resource:'',
-        category:'',
-        explanation:''
+        transaction_id: '',
+        volume: '',
+        unit: '',
+        date_time: '',
+        resource: '',
+        category: '',
+        explanation: ''
       },
       editTransactionFormRules: {
         transaction_id: [
@@ -246,6 +245,9 @@ export default {
           { required: true, message: "请输入交易物品类别", trigger: "blur" },
           { require: true, trigger: "blur"}
         ],
+        explanation: [
+          { required: false}
+        ]
       },
         };
     },
@@ -286,6 +288,7 @@ export default {
             this.pageTotal = this.mainData.pageTotal;
         },
 
+        // 新增操作
          addTransaction() {
           this.$refs.addTransactionFormRef.validate(valid => {
             if(!valid) {
@@ -363,7 +366,7 @@ export default {
           });
         },
         // 编辑操作
-        handleEdit (index, row) {
+        handleEdit(index, row) {
             this.idx = index;
             this.editTransactionForm = row;
             this.editVisible = true;
