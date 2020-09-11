@@ -33,7 +33,7 @@
                         <el-button
                             type="text"
                             icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)">
+                            @click="handleEdit(scope.row)">
                         编辑</el-button>
                         <el-button
                             type="text"
@@ -102,26 +102,26 @@
         <!-- 修改交易信息弹出框 -->
         <el-dialog title="编辑交易信息" :visible.sync="editVisible" width="30%">
             <el-form ref="editTransactionFormRef" :model="editTransactionForm" :rules="editTransactionFormRules" label-width="80px">
-                <el-form-item label="交易编号" prop="transaction_id">
+                <el-form-item label="交易编号" >
                     <el-input v-model="editTransactionForm.transaction_id" disabled></el-input>
                 </el-form-item>
-                <el-form-item label="交易额" prop="volume">
+                <el-form-item label="交易额"  type="number">
                     <el-input v-model="editTransactionForm.volume"></el-input>
                 </el-form-item>
-                 <el-form-item label="交易单位" prop="unit">
+                 <el-form-item label="交易单位" >
                     <el-input v-model="editTransactionForm.unit"></el-input>
                 </el-form-item>
-                 <el-form-item label="交易日期时间" prop="date_time">
+                 <el-form-item label="交易日期时间" >
                     <el-input v-model="editTransactionForm.date_time">
                     </el-input>
                 </el-form-item>
-                 <el-form-item label="交易类型" prop="resource">
+                 <el-form-item label="交易类型" type="number">
                     <el-input v-model="editTransactionForm.resource"></el-input>
                 </el-form-item>
-                 <el-form-item label="交易物品类别" prop="category">
+                 <el-form-item label="交易物品类别" >
                     <el-input v-model="editTransactionForm.category"></el-input>
                 </el-form-item>
-                 <el-form-item label="注释" prop="explanation">
+                 <el-form-item label="注释" >
                     <el-input v-model="editTransactionForm.explanation"></el-input>
                 </el-form-item>
             </el-form>
@@ -214,10 +214,10 @@ export default {
       },
       editTransactionForm: {
         transaction_id: '',
-        volume: '',
+        volume: 0,
         unit: '',
         date_time: '',
-        resource: '',
+        resource: 0,
         category: '',
         explanation: ''
       },
@@ -226,8 +226,8 @@ export default {
 
         ],
         volume: [
-          { required: true, message: "请输入交易额", trigger: "blur" },
-          { require: true, trigger: "blur" }
+          { required: true, message: "请输入交易额", trigger: "blur", type:"number"},
+          { require: true, trigger: "blur", type: "number" }
         ],
         unit: [
           { required: true, message: "请输入交易单位", trigger: "blur" },
@@ -238,15 +238,15 @@ export default {
           { require: true, trigger: "blur"}
         ],
         resource: [
-          { required: true, message: "请输入交易类型", trigger: "blur"},
-          { require: true, trigger: "blur"}
+          { required: true, message: "请输入交易类型", trigger: "blur", type:"number"},
+          { require: true, trigger: "blur", type: "number"}
         ],
         category: [
           { required: true, message: "请输入交易物品类别", trigger: "blur" },
           { require: true, trigger: "blur"}
         ],
         explanation: [
-          { required: false}
+          { required: false }
         ]
       },
         };
@@ -295,12 +295,14 @@ export default {
               return false;
             }
             addList(this.addTransactionForm).then(res => {
+              console.log(res);
               this.$message.success('新增交易信息成功')
               this.dialogVisible = false;
               this.getData();
-            }).catch(res => 
+            }).catch(err => 
             {
               this.$message.error('新增交易信息失败')
+              console.log(err);
             }).catch(res => 
             {
               this.$message.info('已取消新增')
@@ -319,6 +321,7 @@ export default {
         //        addList(this.addTransactionForm)
         //        .then(res => {
         //          if (res.code === 200) {
+        //            console(res);
         //            this.$message.error('新增交易信息失败')
         //            this.dialogVisible = false;
         //            //数据刷新
@@ -328,8 +331,9 @@ export default {
         //            this.init()
         //          } 
         //        })
-        //        .catch( () => {
+        //        .catch(res => {
         //           this.$message.success('新增交易信息成功');
+        //           console(res)
         //        })
         //           .catch( () => {
         //             this.$message.info('已取消新增交易信息')
@@ -366,29 +370,58 @@ export default {
           });
         },
         // 编辑操作
-        handleEdit(index, row) {
-            this.idx = index;
-            this.editTransactionForm = row;
-            this.editVisible = true;
+        handleEdit(row){
+          this.editVisible=true;
+          this.editTransactionForm=JSON.parse(JSON.stringify(row));
+        
+
+        // handleEdit(index, row) {
+        //     this.idx = index;
+        //     this.editTransactionForm = row;
+        //     this.editVisible = true;
+            // this.ediTransactionForm = JSON.parse(JSON.stringify(row));
+            
+            // this.editTransactionForm.transaction_id=tableData.transaction_id;
+            // this.editTransactionForm.volume=tableData.volume;
+            // this.editTransactionForm.unit=tableData.unit;
+            // this.editTransactionForm.date_time=tableData.date_time;
+            // this.editTransactionForm.category=tableData.category;
+            // this.editTransactionForm.resource=tableData.resource;
+            // this.editTransactionForm.explanation=tableData.explanation;
+            // this.editTransactionForm.index=index;
         },
         // 编辑交易信息
         saveEdit() {
+          // var dt = {
+          //     transaction_id: this.editTransactionForm.id,
+          //     volume: this.editTransactionForm.volume,
+          //     unit: this.editTransactionForm.unit,
+          //     date_time: this.editTransactionForm.date_time,
+          //     resource: this.editTransactionForm.resource,
+          //     category: this.editTransactionForm.category,
+          //     explanation: this.editTransactionForm.explanation
+          // };
+          // this.$set(this.editTransactionForm, this.editTransactionForm.index, dt)
           this.$refs.editTransactionFormRef.validate(valid => {
             if(!valid) {
               return false;
             }
             editList(this.editTransactionForm).then(res => {
+              console.log('edit');
               this.$message.success('修改交易信息成功')
               this.editVisible = false;
             }).catch(res => 
             {
+              console.log('error');
               this.$message.error('修改交易信息失败')
             }).catch(res => 
             {
               this.$message.info('已取消修改')
               this.editvisible=false;
+              console.log('quxiao');
             })
           });
+          // this.$set(this.tableData, this.editTransactionform);
         },
 
         // saveEdit() {
