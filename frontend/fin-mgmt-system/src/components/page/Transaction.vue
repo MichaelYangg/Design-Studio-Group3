@@ -101,7 +101,7 @@
 
         <!-- 修改交易信息弹出框 -->
         <el-dialog title="编辑交易信息" :visible.sync="editVisible" width="30%">
-            <el-form ref="editTransactionFormRef" :model="editTransactionForm" :rules="editTransactionFormRules" label-width="70px">
+            <el-form ref="editTransactionFormRef" :model="editTransactionForm" :rules="editTransactionFormRules" label-width="80px">
                 <el-form-item label="交易编号">
                     <el-input v-model="editTransactionForm.transaction_id" disabled></el-input>
                 </el-form-item>
