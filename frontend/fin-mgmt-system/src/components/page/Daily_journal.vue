@@ -31,7 +31,7 @@
                     background
                     layout="total, prev, pager, next"
                     :current-page="dailyquery.pageIndex"
-                    :page-size="dailyquery.pageSize"
+                    :page-size="500"
                     :total="pageTotal"
                     @current-change="handlePageChange"
                 ></el-pagination>
@@ -52,14 +52,13 @@ export default {
                 net_profit:'',
                 unit:'',
                 balance:'',
-                pageIndex: 1,
-                pageSize: 10
+                pageIndex: 1
             },
             tableData: [],
             pageTotal: 0,
             form: {},
             idx: -1,
-            id: -1,
+            id: -1
         };
     },
     created() {
@@ -74,11 +73,6 @@ export default {
                 this.pageTotal = res.pageTotal;
             });
         },
-        // // 触发搜索按钮
-        // handleSearch() {
-        //     this.$set(this.dailyquery, 'account_type', );
-        //     this.getData();
-        // },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.dailyquery, 'pageIndex', val);

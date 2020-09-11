@@ -26,8 +26,10 @@
                 <template slot-scope="scope">￥{{scope.row.revenue}}</template></el-table-column>
                 <el-table-column prop="cost" label="成本" align=center>
                   <template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
-                <el-table-column prop="net_profit" label="利润" align=center><template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
-                <el-table-column prop="balance" label="结余" align=center><template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
+                <el-table-column prop="net_profit" label="利润" align=center>
+                  <template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
+                <el-table-column prop="balance" label="结余" align=center>
+                  <template slot-scope="scope">￥{{scope.row.cost}}</template></el-table-column>
                 <el-table-column prop="date" label="记录日期" align=center></el-table-column>
             </el-table>
             <div class="pagination">
@@ -79,11 +81,6 @@ export default {
                 this.pageTotal = res.pageTotal;
             });
         },
-        // // 触发搜索按钮
-        // handleSearch() {
-        //     this.$set(this.monthlyquery, 'month');
-        //     this.getData();
-        // },
         // 分页导航
         handlePageChange(val) {
             this.$set(this.monthlyquery, 'pageIndex', val);

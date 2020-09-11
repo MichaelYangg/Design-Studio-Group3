@@ -9,7 +9,7 @@
         </div>
         <div class="container">
             <div class="handle-box">
-                <el-input v-model="query.transaction_id" placeholder="输入交易编号" class="handle-input mr10"></el-input>
+                <el-input v-model="query.transaction_id" placeholder="输入交易编号" clearable @clear="handleCancel()" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch()">搜索</el-button>
           <el-button type="primary" @click="dialogVisible=true">添加交易信息</el-button>
             </div>
@@ -94,7 +94,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addTransaction">确 定</el-button>
+        <el-button type="primary" @click="addTransaction()">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -127,7 +127,7 @@
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editVisible = false">取 消</el-button>
-                <el-button type="primary" @click="saveEdit">确 定</el-button>
+                <el-button type="primary" @click="saveEdit()">确 定</el-button>
             </span>
         </el-dialog>
 
@@ -162,6 +162,7 @@ export default {
                 pageSize: 10
             },
             tableData: [],
+            mainData: Object,
             dialogVisible: false,
             editVisible: false,
             deleteVisible: false,
@@ -238,7 +239,7 @@ export default {
           { require: true, trigger: "blur"}
         ],
         resource: [
-          { required: true, message: "0：收银 1：储值 2：入库 3：出库 4：加工费用 5：盘亏盘盈 6：外卖 7：其他", trigger: "blur"},
+          { required: true, message: "请输入交易类型", trigger: "blur"},
           { require: true, trigger: "blur"}
         ],
         category: [
@@ -256,54 +257,86 @@ export default {
         // 从后端数据库获取交易信息
         getData() {
             fetchData(this.query).then(res => {
+                this.mainData = res;
                 this.tableData = res.list;
                 this.pageTotal = res.pageTotal;
             });
         },
         // 触发搜索按钮
         handleSearch () {
-          console.log("search");
               this.$set(this.query, 'pageIndex', 1);
               this.getData();
+              console.log(this.query.transaction_id);
+             // 通过查询交易编号获取对应的交易信息
              queryTransaction(this.query.transaction_id).then(res => {
+                 console.log(res);
                  var list = [];
-                 list.append(res);
-                 console.log(list);
-                 this.tableData = res.list;
+                 list.push(res); 
+                 this.tableData = list;
                  this.pageTotal = 1;
              })
-             
-             .catch( () => {
+             .catch(err => {
+               this.$message.error('该交易编号不存在');
+               console.log(err);
              })   
         },
-        // 新增操作
+        // 清空搜索框，将交易信息表返回原状
+        handleCancel () {
+            this.tableData = this.mainData.list;
+            this.pageTotal = this.mainData.pageTotal;
+        },
+
          addTransaction() {
-        // // 二次进行用户数据的验证
-           this.$refs.addTransactionFormRef.validate(valid => {
-             if (valid) {
-               //发起新增交易信息请求
-               addList(this.addTransactionForm)
-               .then(res => {
-                 if (res.data.meta.status === 200) {
-                   this.$message.error('新增交易信息失败')
-                   //数据刷新
-                  this.getData();
-                   //表单元素的数据重置
-                   this.$refs.addTransactionFormRef.resetFields()
-                   this.init()
-                 } 
-               })
-               .catch( () => {
-                  this.$message.success('新增交易信息成功');
-               })
-                  .catch( () => {
-                    this.$message.info('已取消新增交易信息')
-                    this.dialogVisible = false
-                  });
-              this.$set(this.tableData, this.addTransactionform);
-              }
-           })
-         },
+          this.$refs.addTransactionFormRef.validate(valid => {
+            if(!valid) {
+              return false;
+            }
+            addList(this.addTransactionForm).then(res => {
+              this.$message.success('新增交易信息成功')
+              this.dialogVisible = false;
+              this.getData();
+            }).catch(res => 
+            {
+              this.$message.error('新增交易信息失败')
+            }).catch(res => 
+            {
+              this.$message.info('已取消新增')
+              this.dialogVisible=false;
+              console.log(res);
+            })
+          });
+        },
+
+        // // 新增操作
+        //  addTransaction() {
+        //  // 二次进行用户数据的验证
+        //    this.$refs.addTransactionFormRef.validate(valid => {
+        //      if (valid) {
+        //        //发起新增交易信息请求
+        //        addList(this.addTransactionForm)
+        //        .then(res => {
+        //          if (res.code === 200) {
+        //            this.$message.error('新增交易信息失败')
+        //            this.dialogVisible = false;
+        //            //数据刷新
+        //           this.getData();
+        //            //表单元素的数据重置
+        //            this.$refs.addTransactionFormRef.resetFields()
+        //            this.init()
+        //          } 
+        //        })
+        //        .catch( () => {
+        //           this.$message.success('新增交易信息成功');
+        //        })
+        //           .catch( () => {
+        //             this.$message.info('已取消新增交易信息')
+        //             this.dialogVisible = false
+        //           });
+        //       this.$set(this.tableData, this.addTransactionForm);
+        //       }
+        //    })
+        //  },
+
         // 删除操作
         handleDelete(index, row) {
             // 二次确认删除
@@ -338,28 +371,52 @@ export default {
         // 编辑交易信息
         saveEdit() {
           this.$refs.editTransactionFormRef.validate(valid => {
-            if(valid) {
-              editList(this.editTransactionForm).then(res => {
-                console.log(res)
-                if(res.code === 200) {
-                  this.$message.error('修改交易信息失败')
-                  //数据刷新
-                  this.editVisible=false
-                  // 表单元素的数据重置
-                  this.$refs.editTransactionFormRef.resetFields()
-                  this.init()
-                }
-                else
-                 {
-                  this.$message.success('修改交易信息成功')
-                }
-              }).catch( () => {
-                this.$message.info('已取消修改交易信息');
-              })
-            } 
+            if(!valid) {
+              return false;
+            }
+            editList(this.editTransactionForm).then(res => {
+              this.$message.success('修改交易信息成功')
+              this.editVisible = false;
+            }).catch(res => 
+            {
+              this.$message.error('修改交易信息失败')
+            }).catch(res => 
+            {
+              this.$message.info('已取消修改')
+              this.editvisible=false;
+            })
           });
-            this.$set(this.tableData, this.editTransactionform);
         },
+
+        // saveEdit() {
+        //   this.$refs.editTransactionFormRef.validate(valid => {
+        //     if(valid) {
+        //       editList(this.editTransactionForm).then(res => {
+        //         console.log(res)
+        //         if(res.data.meta.status === 200) {
+        //           this.$message.error('修改交易信息失败')
+        //           //数据刷新
+        //           this.editVisible=false
+        //           // 表单元素的数据重置
+        //           this.$refs.editTransactionFormRef.resetFields()
+        //           this.init()
+        //         }
+        //         else
+        //          {
+        //           this.$message.info('修改交易信息成功')
+        //           this.editVisible=false;
+        //         }
+        //       }).catch( () => {
+        //         this.$message.success('已取消修改交易信息');
+        //         this.editVisible=false;
+        //       })
+        //     } 
+        //   });
+        //     this.$set(this.tableData, this.editTransactionform);
+        // },
+
+
+
         // 分页导航
         handlePageChange(val) {
             this.$set(this.query, 'pageIndex', val);
