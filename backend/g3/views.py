@@ -7,9 +7,14 @@ import xmltodict
 # Create your views here.
 
 def other_cost(request):
-    xmlinfo = request.POST
-    data = xmltodict.parse(xmlinfo)
-    cost = data['cost']
+    # print(request.body)
+    xmlinfo = request.body
+    # print(xmlinfo)
+    # print(type(xmlinfo))
+    data = xmltodict.parse(xmlinfo)['root']
+    # print(data)
+    # print(type(data))
+    cost = data['ingd_cost']
     current_tran = Transaction.objects.order_by('-transaction_id')[0]
     current_id = current_tran.transaction_id
     new_id = current_id + 1
@@ -19,7 +24,6 @@ def other_cost(request):
     except:
         result = 'fail'
     return JsonResponse({'result':'success'})
-
 
 def payment_done_add_credit(request):
     # payment = request.POST
